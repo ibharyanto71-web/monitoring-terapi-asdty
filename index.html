@@ -1,0 +1,1565 @@
+<!doctype html><html lang='id'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Monitoring Terapi ASDTY - PWA v1.5.0</title><meta name='theme-color' content='#082f52'><meta name='application-name' content='ASDTY Monitoring'><meta name='apple-mobile-web-app-capable' content='yes'><meta name='apple-mobile-web-app-status-bar-style' content='default'><meta name='apple-mobile-web-app-title' content='ASDTY Monitoring'><link rel='manifest' href='manifest.webmanifest'><link rel='icon' href='icons/icon-192.png'><link rel='apple-touch-icon' href='icons/icon-192.png'><style>
+*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,Arial,sans-serif;background:#f4f7fb;color:#10213b}.app{display:grid;grid-template-columns:250px 1fr;min-height:100vh}.side{background:linear-gradient(180deg,#06294b,#031c35);color:#fff;padding:24px 16px;position:sticky;top:0;height:100vh}.brand{font-size:24px;font-weight:800;padding:8px 10px 28px}.brand small{display:block;font-size:11px;font-weight:500;opacity:.75}.nav a{display:flex;gap:12px;align-items:center;color:#dce9f6;text-decoration:none;padding:13px 14px;margin:5px 0;border-radius:10px}.nav a.active,.nav a:hover{background:#287be8;color:white}.help{position:absolute;left:18px;right:18px;bottom:22px;border:1px solid #255070;border-radius:12px;padding:15px;text-align:center}.wa{display:block;margin-top:10px;color:white;text-decoration:none;font-weight:700}.main{padding:26px}.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}.top h1{margin:0;font-size:28px}.muted{color:#718096}.card{background:#fff;border:1px solid #e5ebf3;border-radius:15px;box-shadow:0 4px 16px rgba(20,45,80,.05)}.patient{padding:18px;display:grid;grid-template-columns:1.3fr 1.4fr .55fr .7fr;gap:20px;align-items:center}.person{display:flex;gap:15px;align-items:center}.avatar{width:76px;height:76px;border-radius:50%;background:#dce5ef;display:grid;place-items:center;font-size:32px}.person h2{margin:0 0 8px}.meta{font-size:13px;line-height:1.8}.details{display:grid;grid-template-columns:1fr 1.4fr;gap:8px;font-size:13px}.progress{width:110px;height:110px;border-radius:50%;background:conic-gradient(#2f7eea 0 50%,#e9edf2 50%);display:grid;place-items:center}.progress:after{content:attr(data-pct) '%\A Kemajuan Terapi';white-space:pre;text-align:center;font-size:12px;font-weight:700;width:86px;height:86px;border-radius:50%;background:white;display:grid;place-items:center}.status{background:#f7f9fc;border:1px solid #e6ebf2;border-radius:10px;padding:12px;font-size:12px;line-height:2}.pill{float:right;background:#dcf7e5;color:#178545;padding:0 8px;border-radius:6px}.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:16px 0}.kpi{padding:16px}.kpi b{display:block;font-size:25px;margin:5px 0}.grid{display:grid;grid-template-columns:1.45fr .85fr .7fr;gap:16px}.chart,.summary,.rightcard,.history{padding:16px}.chart{min-height:310px}.grid>.chart{height:clamp(360px,calc(100vh - 390px),620px);min-height:360px}.grid>.chart #progressChartWrap{width:100%;height:calc(100% - 32px);display:block}.chart h3,.summary h3,.rightcard h3,.history h3{margin:0 0 15px;font-size:15px}.summary .item{padding:13px 0;border-bottom:1px solid #edf0f4}.summary .item:last-child{border:0}.green{color:#15915b}.rightcol{display:grid;gap:16px}.rightcard p{font-size:12px;line-height:1.7}.btn{display:block;background:#2778e6;color:white;text-align:center;padding:10px;border-radius:8px;text-decoration:none;font-size:12px;font-weight:700}.bottom{display:grid;grid-template-columns:1.45fr .75fr;gap:16px;margin-top:16px}table{width:100%;border-collapse:collapse;font-size:11px}th,td{padding:10px 7px;border-bottom:1px solid #edf0f4;text-align:left}.checks div{padding:8px 0;font-size:12px}.checks span{color:#13965d;margin-right:7px}.foot{text-align:center;color:#8290a3;font-size:11px;padding:18px}
+@media(max-width:1050px){.grid>.chart{height:clamp(340px,52vh,560px);min-height:340px}.app{grid-template-columns:76px 1fr}.side{padding:18px 9px}.brand{font-size:14px;padding:8px 4px 20px}.brand small,.nav a span,.help{display:none}.nav a{justify-content:center;font-size:20px}.patient{grid-template-columns:1fr 1fr}.kpis{grid-template-columns:1fr 1fr}.grid,.bottom{grid-template-columns:1fr}.rightcol{grid-template-columns:1fr 1fr}}
+@media(max-width:650px){.grid>.chart{height:clamp(300px,48vh,460px);min-height:300px}.app{display:block}.side{position:relative;height:auto;display:flex;align-items:center;overflow:auto}.brand{min-width:100px;padding:5px}.nav{display:flex}.nav a{min-width:48px;margin:0 2px}.main{padding:14px}.top h1{font-size:21px}.top .muted{display:none}.patient{grid-template-columns:1fr}.details{grid-template-columns:1fr}.progress{margin:auto}.kpis{grid-template-columns:1fr 1fr}.rightcol{grid-template-columns:1fr}.bottom{grid-template-columns:1fr}.tablewrap{overflow:auto}}
+
+.modal{display:none;position:fixed;inset:0;background:rgba(3,20,38,.58);z-index:99;padding:20px;overflow:auto}.modal.open{display:grid;place-items:center}.modalbox{background:#fff;width:min(760px,100%);border-radius:18px;padding:22px;box-shadow:0 20px 60px rgba(0,0,0,.25)}.modalhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}.modalhead h2{margin:0}.close{border:0;background:#eef3f8;width:36px;height:36px;border-radius:10px;font-size:20px;cursor:pointer}.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.field{display:grid;gap:6px}.field.full{grid-column:1/-1}.field label{font-size:12px;font-weight:700}.field input,.field select,.field textarea{width:100%;border:1px solid #dbe4ee;border-radius:9px;padding:11px;font:inherit}.field textarea{min-height:90px;resize:vertical}.actions{display:flex;justify-content:flex-end;gap:10px;margin-top:18px}.btn2{border:0;border-radius:9px;padding:11px 16px;font-weight:700;cursor:pointer}.primary{background:#2778e6;color:#fff}.secondary{background:#edf2f7;color:#24364d}.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}.toolbar button{border:0;background:#2778e6;color:#fff;border-radius:9px;padding:10px 14px;font-weight:700;cursor:pointer}.toolbar button.alt{background:#fff;color:#2778e6;border:1px solid #cfe0f5}.notice{display:none;background:#dcf7e5;color:#166b3d;border:1px solid #bce9ca;padding:10px 14px;border-radius:10px;margin-bottom:14px;font-size:13px}.patientselect{padding:10px;border:1px solid #dbe4ee;border-radius:9px;background:#fff;min-width:210px}@media(max-width:650px){.formgrid{grid-template-columns:1fr}.field.full{grid-column:auto}.toolbar{display:grid;grid-template-columns:1fr 1fr}.toolbar button,.patientselect{width:100%;min-width:0}}
+
+.patient-data-toolbar{display:flex;gap:14px;align-items:center;justify-content:space-between}
+.patient-data-toolbar input{flex:1;max-width:560px;border:1px solid #dbe4ee;border-radius:10px;padding:12px 14px;font:inherit}
+.patient-table td{vertical-align:middle}
+.action-group{display:flex;gap:6px;flex-wrap:wrap}
+.action-btn{border:0;border-radius:7px;padding:7px 9px;font-size:11px;font-weight:700;cursor:pointer}
+.action-monitor{background:#e8f2ff;color:#1769c9}.action-edit{background:#fff4dc;color:#9a6400}.action-delete{background:#ffe9e9;color:#b42323}
+@media(max-width:650px){.patient-data-toolbar{align-items:stretch;flex-direction:column}.patient-data-toolbar input{max-width:none}.action-group{min-width:190px}}
+
+.schedule-toolbar{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.schedule-toolbar .filters{display:flex;gap:10px;flex-wrap:wrap}
+.schedule-toolbar select,.schedule-toolbar input{border:1px solid #dbe4ee;border-radius:9px;padding:10px;background:#fff}
+.schedule-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:16px}
+.schedule-card{padding:16px}.schedule-card h3{margin:0 0 8px}.schedule-card p{font-size:12px;line-height:1.65;margin:5px 0}
+.schedule-status{display:inline-block;border-radius:20px;padding:4px 9px;font-size:11px;font-weight:700}
+.st-planned{background:#e8f2ff;color:#1769c9}.st-done{background:#dcf7e5;color:#167447}.st-cancelled{background:#ffe9e9;color:#b42323}
+.schedule-actions{display:flex;gap:7px;margin-top:12px;flex-wrap:wrap}
+@media(max-width:950px){.schedule-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:650px){.schedule-grid{grid-template-columns:1fr}.schedule-toolbar{align-items:stretch}.schedule-toolbar .filters{display:grid;grid-template-columns:1fr}.schedule-toolbar select,.schedule-toolbar input{width:100%}}
+
+.notes-toolbar{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.notes-toolbar .filters{display:flex;gap:10px;flex-wrap:wrap}
+.notes-toolbar select,.notes-toolbar input{border:1px solid #dbe4ee;border-radius:9px;padding:10px;background:#fff}
+.notes-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:16px}
+.note-card{padding:17px}.note-card h3{margin:0 0 5px}.note-meta{font-size:11px;color:#718096;margin-bottom:10px}
+.note-body{font-size:13px;line-height:1.65;white-space:pre-line}
+.note-badge{display:inline-block;border-radius:20px;padding:4px 9px;font-size:10px;font-weight:700;background:#e8f2ff;color:#1769c9;margin-bottom:8px}
+.note-actions{display:flex;gap:7px;margin-top:13px;flex-wrap:wrap}
+@media(max-width:800px){.notes-grid{grid-template-columns:1fr}}
+@media(max-width:650px){.notes-toolbar{align-items:stretch}.notes-toolbar .filters{display:grid;grid-template-columns:1fr}.notes-toolbar select,.notes-toolbar input{width:100%}}
+
+.eval-controls{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.eval-controls select{border:1px solid #dbe4ee;border-radius:9px;padding:11px;background:#fff;min-width:260px}
+.eval-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:16px}
+.eval-kpi{padding:16px}.eval-kpi .label{font-size:12px;color:#64748b}.eval-kpi .value{font-size:25px;font-weight:800;margin:5px 0}.eval-kpi .sub{font-size:11px;color:#64748b}
+.eval-layout{display:grid;grid-template-columns:1.45fr .75fr;gap:16px;margin-top:16px}
+.eval-chart{padding:17px;min-height:430px}.eval-summary{padding:17px}
+.compare-row{padding:13px 0;border-bottom:1px solid #edf1f5}.compare-row:last-child{border-bottom:0}
+.compare-head{display:flex;justify-content:space-between;gap:10px;font-weight:700;font-size:13px}
+.compare-values{display:flex;justify-content:space-between;font-size:12px;color:#64748b;margin-top:5px}
+.progressbar{height:8px;background:#edf2f7;border-radius:20px;overflow:hidden;margin-top:8px}.progressbar span{display:block;height:100%;background:#2f7eea;border-radius:20px}
+.eval-conclusion{margin-top:16px;padding:16px;border-radius:12px;background:#f7fbff;border:1px solid #dcecff;font-size:13px;line-height:1.65}
+@media(max-width:950px){.eval-kpis{grid-template-columns:1fr 1fr}.eval-layout{grid-template-columns:1fr}}
+@media(max-width:650px){.eval-kpis{grid-template-columns:1fr}.eval-controls{align-items:stretch}.eval-controls select{width:100%;min-width:0}}
+
+.condition-value{float:right;font-weight:800}
+.condition-up{color:#15915b}.condition-down{color:#d64545}.condition-flat{color:#718096}
+.summary-note{margin-top:12px;padding:10px;border-radius:9px;background:#f7fbff;border:1px solid #e2edf8;font-size:11px;line-height:1.55;color:#53657a}
+
+#printReport{display:none}
+@page{size:A4 portrait;margin:8mm}
+@media print{
+ html,body{margin:0!important;padding:0!important;width:210mm!important;height:auto!important;min-height:0!important;overflow:visible!important;background:#fff!important}
+ body>*:not(#printReport){display:none!important}
+ #printReport{display:block!important;position:static!important;width:auto!important;max-width:none!important;height:auto!important;min-height:0!important;margin:0!important;padding:0!important;background:#fff!important;color:#111!important;font-family:Arial,sans-serif!important;font-size:9.5pt!important;line-height:1.25!important;overflow:visible!important}
+ #printReport *{box-sizing:border-box!important}
+ #printReport .pr-head{border-bottom:1.5px solid #111;padding:0 0 5px!important;margin:0 0 6px!important}
+ #printReport .pr-head h1{font-size:19pt!important;line-height:1.05!important;margin:0 0 2px!important}
+ #printReport .pr-head div{font-size:10.5pt!important}
+ #printReport .pr-grid{display:grid!important;grid-template-columns:1fr 1fr!important;gap:3px 16px!important;margin:5px 0!important}
+ #printReport .pr-box{border:1px solid #bbb!important;border-radius:5px!important;padding:6px 8px!important;margin:6px 0!important;break-inside:avoid!important;page-break-inside:avoid!important}
+ #printReport .pr-box h3{font-size:12pt!important;line-height:1.1!important;margin:0 0 4px!important}
+ #printReport table{width:100%!important;border-collapse:collapse!important;font-size:7.8pt!important;line-height:1.15!important;table-layout:auto!important}
+ #printReport th,#printReport td{border:1px solid #bbb!important;padding:3px 4px!important;text-align:left!important;vertical-align:top!important}
+ #printReport th{background:#f2f2f2!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+ #printReport .pr-sign{margin-top:10px!important;display:flex!important;justify-content:flex-end!important;break-inside:avoid!important;page-break-inside:avoid!important}
+ #printReport .pr-sign div{text-align:center!important;min-width:170px!important;font-size:9pt!important}
+ #printReport .pr-sign br{line-height:.65!important}
+}
+</style></head><body><div class='app'><aside class='side'><div class='brand'>ASDTY.<small>HEALING POINT · Wellness Center</small></div><nav class='nav'><a class='active' href="#" id="navDashboard"><b>⌂</b><span>Dashboard</span></a><a href="#" id="navDataPasien"><b>♙</b><span>Data Pasien</span></a><a href='#grafik'><b>⌁</b><span>Monitoring Terapi</span></a><a href='#' id='navSchedule'><b>▣</b><span>Jadwal Terapi</span></a><a href='#' id='navNotes'><b>▤</b><span>Catatan Terapi</span></a><a href='#' id='navEvaluation'><b>▥</b><span>Evaluasi & Grafik</span></a><a href='#' id='navRecipes'><b>⊕</b><span>Resep & Anjuran</span></a></nav><div class='help'>Butuh Bantuan?<a class='wa' href='https://wa.me/6282234680852'>☎ 0822 3468 0852</a></div></aside><main class='main'><div id='dashboardView'><div class='top'><div><h1>Monitoring Terapi</h1><div>Pengobatan Umum</div></div><div class='muted'>Dashboard Evaluasi Pasien</div></div>
+<div id='notice' class='notice'>Data berhasil disimpan.</div><div class='toolbar'><button onclick="openModal('patientModal')">＋ Tambah Pasien</button><button onclick="openSession()">＋ Input Sesi Terapi</button><button class="alt" type="button" onclick="printPatientReport()">Cetak Laporan</button><select id='patientSelect' class='patientselect' onchange='switchPatient(this.value)'></select><button class='alt' onclick='resetDemo()'>Reset Data Demo</button>
+<button class='alt' onclick='exportBackup()'>Backup Data</button>
+<button class='alt' onclick="document.getElementById('restoreFile').click()">Restore Data</button>
+<input id='restoreFile' type='file' accept='.json,application/json' style='display:none' onchange="importBackup(this.files[0]);this.value=''"></div><section class='card patient'><div class='person'><div class='avatar'>👤</div><div><h2 id='patientName'>Budi Santoso</h2><div class='meta' id='patientMeta'></div></div></div><div class='details'><span class='muted'>ID Pasien</span><b id='patientId'></b><span class='muted'>Terapis</span><b id='patientTherapist'></b><span class='muted'>Program Terapi</span><b id='patientProgram'></b><span class='muted'>Total Sesi</span><b id='patientSessions'></b></div><div class='progress' id='progressCircle'></div><div class='status'>Status <span class='pill'>Aktif</span><br>Kondisi Terakhir <b class='green' id='lastConditionStatus' style='float:right'>-</b><br>Update Terakhir <b id='lastUpdate' style='float:right'></b></div></section>
+<section class='kpis'><div class='card kpi'>📈 <span class='muted'>Total Sesi</span><b id='kpiSessions'></b><small>Sesi selesai</small></div><div class='card kpi'>↗️ <span class='muted'>Kemajuan</span><b id='kpiProgress'></b><small>Dari target</small></div><div class='card kpi'>⭐ <span class='muted'>Perbaikan Kondisi</span><b id='kpiImprove'></b><small>Dibanding awal</small></div><div class='card kpi'>📅 <span class='muted'>Sisa Sesi</span><b id='kpiRemain'></b><small>Sesi tersisa</small></div></section>
+<section class='grid'><div class='card chart' id='grafik'><h3>Grafik Kemajuan Terapi</h3><div id='progressChartWrap' style='width:100%;height:calc(100% - 32px);min-height:300px'><svg id='progressChart' viewBox='0 0 900 420' preserveAspectRatio='none' style='width:100%;height:100%;display:block'></svg></div></div><div class='card summary'><h3>Ringkasan Kondisi</h3><div id='conditionSummary'><div class='muted'>Belum ada data sesi terapi.</div></div></div><div class='rightcol'><div class='card rightcard'><h3>📅 Jadwal Terapi Berikutnya</h3><div id='nextSchedule'><p>Belum ada jadwal terapi.</p></div><a class='btn' href='#' onclick="event.preventDefault();showScheduleView()">Lihat Jadwal Lengkap</a></div><div class='card rightcard'><h3>📋 Catatan Terapi Terakhir</h3><div id='latestTherapyNote'><p>Belum ada catatan terapi.</p></div></div></div></section>
+<section class='bottom'><div class='card history'><h3>Riwayat Sesi Terapi</h3><div class='tablewrap'><table><thead><tr><th>Sesi</th><th>Tanggal</th><th>Terapis</th><th>Keluhan</th><th>Nyeri</th><th>Catatan</th></tr></thead><tbody id='historyBody'></tbody></table></div></div><div class='card rightcard checks'><h3>Resep & Anjuran</h3><div id='recipeSummary'><div class='muted'>Belum ada resep atau anjuran.</div></div><button type='button' class='btn' style='border:0;width:100%;margin-top:8px' onclick='showRecipesView()'>Kelola Resep & Anjuran</button></div></section><div class='foot'>ⓘ Gunakan data pasien sesuai persetujuan, kebutuhan pelayanan, dan kebijakan privasi yang berlaku.</div></div>
+<section id="patientDataView" style="display:none">
+  <div class="top">
+    <div><h1>Data Pasien</h1><div>Daftar pasien terapi pengobatan umum</div></div>
+    <button class="btn2 primary" type="button" onclick="openModal('patientModal')">＋ Tambah Pasien</button>
+  </div>
+  <div class="card" style="padding:18px;margin-bottom:16px">
+    <div class="patient-data-toolbar">
+      <input id="patientSearch" type="search" placeholder="Cari nama, ID pasien, kondisi, terapis..." oninput="renderPatientTable()" />
+      <div id="patientCount" class="muted"></div>
+    </div>
+  </div>
+  <div class="card history">
+    <div class="tablewrap">
+      <table class="patient-table">
+        <thead>
+          <tr><th>ID Pasien</th><th>Nama</th><th>Usia</th><th>Kondisi</th><th>Terapis</th><th>Program</th><th>Sesi</th><th>Aksi</th></tr>
+        </thead>
+        <tbody id="patientTableBody"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section id="scheduleView" style="display:none">
+  <div class="top">
+    <div><h1>Jadwal Terapi</h1><div>Kelola jadwal terapi seluruh pasien</div></div>
+    <button type="button" class="btn2 primary" onclick="openScheduleModal()">＋ Tambah Jadwal</button>
+  </div>
+  <div class="card" style="padding:18px">
+    <div class="schedule-toolbar">
+      <div class="filters">
+        <select id="schedulePatientFilter" onchange="renderSchedules()"><option value="">Semua Pasien</option></select>
+        <select id="scheduleStatusFilter" onchange="renderSchedules()">
+          <option value="">Semua Status</option><option value="Terjadwal">Terjadwal</option><option value="Selesai">Selesai</option><option value="Dibatalkan">Dibatalkan</option>
+        </select>
+        <input id="scheduleSearch" type="search" placeholder="Cari pasien / terapis..." oninput="renderSchedules()">
+      </div>
+      <div id="scheduleCount" class="muted"></div>
+    </div>
+  </div>
+  <div id="scheduleGrid" class="schedule-grid"></div>
+</section>
+
+
+<section id="notesView" style="display:none">
+  <div class="top">
+    <div><h1>Catatan Terapi</h1><div>Catatan perkembangan dan evaluasi setiap pasien</div></div>
+    <button type="button" class="btn2 primary" onclick="openNoteModal()">＋ Tambah Catatan</button>
+  </div>
+  <div class="card" style="padding:18px">
+    <div class="notes-toolbar">
+      <div class="filters">
+        <select id="notesPatientFilter" onchange="renderNotes()"><option value="">Semua Pasien</option></select>
+        <input id="notesSearch" type="search" placeholder="Cari pasien, terapis, catatan..." oninput="renderNotes()">
+      </div>
+      <div id="notesCount" class="muted"></div>
+    </div>
+  </div>
+  <div id="notesGrid" class="notes-grid"></div>
+</section>
+
+
+<section id="evaluationView" style="display:none">
+  <div class="top">
+    <div><h1>Evaluasi &amp; Grafik</h1><div>Analisis perkembangan terapi berdasarkan data setiap sesi</div></div>
+  </div>
+
+  <div class="card" style="padding:18px">
+    <div class="eval-controls">
+      <div>
+        <label style="display:block;font-size:11px;font-weight:700;margin-bottom:6px">Pilih Pasien</label>
+        <select id="evaluationPatient" onchange="renderEvaluation(this.value)"></select>
+      </div>
+      <button type="button" class="btn2 primary" onclick="showDashboardForPatient(document.getElementById('evaluationPatient').value)">Buka Monitoring</button>
+    </div>
+  </div>
+
+  <div class="eval-kpis">
+    <div class="card eval-kpi"><div class="label">Total Sesi</div><div class="value" id="evalSessions">0 / 0</div><div class="sub">Sesi terapi tercatat</div></div>
+    <div class="card eval-kpi"><div class="label">Kemajuan Program</div><div class="value" id="evalProgress">0%</div><div class="sub">Berdasarkan target sesi</div></div>
+    <div class="card eval-kpi"><div class="label">Perubahan Nyeri</div><div class="value" id="evalPain">-</div><div class="sub">Skala awal → terbaru</div></div>
+    <div class="card eval-kpi"><div class="label">Fungsi Gerak</div><div class="value" id="evalMovement">-</div><div class="sub">Nilai terbaru</div></div>
+  </div>
+
+  <div class="eval-layout">
+    <div class="card eval-chart">
+      <h3 style="margin-top:0">Grafik Perkembangan Terapi</h3>
+      <div style="height:365px"><svg id="evaluationChart" viewBox="0 0 900 420" preserveAspectRatio="none" style="width:100%;height:100%;display:block"></svg></div>
+    </div>
+    <div class="card eval-summary">
+      <h3 style="margin-top:0">Perbandingan Awal &amp; Terbaru</h3>
+      <div id="evaluationComparison"></div>
+      <div class="eval-conclusion" id="evaluationConclusion">Belum ada data evaluasi.</div>
+    </div>
+  </div>
+</section>
+
+<section id="recipesView" style="display:none">
+  <div class="top">
+    <div><h1>Resep &amp; Anjuran</h1><div>Kelola resep, latihan, dan anjuran per pasien</div></div>
+    <button type="button" class="btn2 primary" onclick="openRecipeModal()">+ Tambah Resep / Anjuran</button>
+  </div>
+  <div class="card" style="padding:18px;margin-bottom:16px">
+    <div class="eval-controls">
+      <div>
+        <label style="display:block;font-size:11px;font-weight:700;margin-bottom:6px">Pilih Pasien</label>
+        <select id="recipePatient" onchange="current=this.value;renderRecipesView()"></select>
+      </div>
+      <button type="button" class="btn2 secondary" onclick="showDashboardForPatient(document.getElementById('recipePatient').value)">Buka Monitoring</button>
+    </div>
+  </div>
+  <div id="recipeGrid" class="notes-grid"></div>
+</section>
+
+</main></div>
+
+<div class="modal" id="patientModal"><div class="modalbox"><div class="modalhead"><h2>Tambah Pasien</h2><button class="close" onclick="closeModal('patientModal')">×</button></div><form id="patientForm"><div class="formgrid"><div class="field"><label>Nama Pasien</label><input name="name" required></div><div class="field"><label>Usia</label><input name="age" type="number" min="1" required></div><div class="field"><label>Jenis Kelamin</label><select name="gender"><option>Laki-laki</option><option>Perempuan</option></select></div><div class="field"><label>Keluhan / Kondisi</label><input name="condition" required></div><div class="field"><label>Nama Terapis</label><input name="therapist" required></div><div class="field"><label>Program Terapi</label><input name="program" required></div><div class="field"><label>Target Sesi</label><input name="target" type="number" min="1" value="12" required></div><div class="field"><label>Tanggal Daftar</label><input name="registered" type="date" required></div></div><div class="actions"><button type="button" class="btn2 secondary" onclick="closeModal('patientModal')">Batal</button><button type="button" class="btn2 primary" onclick="savePatient()">Simpan Pasien</button></div></form></div></div>
+<div class="modal" id="sessionModal"><div class="modalbox"><div class="modalhead"><h2>Input Sesi Terapi</h2><button class="close" onclick="closeModal('sessionModal')">×</button></div><form id="sessionForm"><div class="formgrid"><div class="field"><label>Tanggal Terapi</label><input name="date" type="date" required></div><div class="field"><label>Skala Nyeri (0–10)</label><input name="pain" type="number" min="0" max="10" required></div><div class="field"><label>Fungsi Gerak (0–100%)</label><input name="movement" type="number" min="0" max="100" required></div><div class="field"><label>Kualitas Hidup (0–100%)</label><input name="quality" type="number" min="0" max="100" required></div><div class="field full"><label>Keluhan Utama</label><input name="complaint" required></div><div class="field full"><label>Catatan / Evaluasi Terapis</label><textarea name="note" required></textarea></div></div><div class="actions"><button type="button" class="btn2 secondary" onclick="closeModal('sessionModal')">Batal</button><button type="button" class="btn2 primary" onclick="saveSession()">Simpan Sesi</button></div></form></div></div>
+
+<div class="modal" id="editPatientModal"><div class="modalbox"><div class="modalhead"><h2>Edit Pasien</h2><button class="close" type="button" onclick="closeModal('editPatientModal')">×</button></div>
+<form id="editPatientForm"><input type="hidden" name="id"><div class="formgrid">
+<div class="field"><label>Nama Pasien</label><input name="name" required></div>
+<div class="field"><label>Usia</label><input name="age" type="number" min="1" required></div>
+<div class="field"><label>Jenis Kelamin</label><select name="gender"><option>Laki-laki</option><option>Perempuan</option></select></div>
+<div class="field"><label>Keluhan / Kondisi</label><input name="condition" required></div>
+<div class="field"><label>Nama Terapis</label><input name="therapist" required></div>
+<div class="field"><label>Program Terapi</label><input name="program" required></div>
+<div class="field"><label>Target Sesi</label><input name="target" type="number" min="1" required></div>
+<div class="field"><label>Tanggal Daftar</label><input name="registered" type="date" required></div>
+</div><div class="actions"><button type="button" class="btn2 secondary" onclick="closeModal('editPatientModal')">Batal</button><button class="btn2 primary" type="button" onclick="saveEditPatient()">Simpan Perubahan</button></div></form></div></div>
+
+<div class="modal" id="scheduleModal"><div class="modalbox"><div class="modalhead"><h2 id="scheduleModalTitle">Tambah Jadwal Terapi</h2><button class="close" type="button" onclick="closeModal('scheduleModal')">×</button></div>
+<form id="scheduleForm">
+<input type="hidden" name="scheduleId">
+<div class="formgrid">
+<div class="field full"><label>Pasien</label><select name="patientId" id="schedulePatient" required></select></div>
+<div class="field"><label>Tanggal Terapi</label><input name="date" type="date" required></div>
+<div class="field"><label>Jam Terapi</label><input name="time" type="time" required></div>
+<div class="field"><label>Nomor Sesi</label><input name="sessionNo" type="number" min="1" required></div>
+<div class="field"><label>Nama Terapis</label><input name="therapist" required></div>
+<div class="field"><label>Status</label><select name="status"><option>Terjadwal</option><option>Selesai</option><option>Dibatalkan</option></select></div>
+<div class="field"><label>Durasi</label><select name="duration"><option value="60">60 menit</option><option value="45">45 menit</option><option value="30">30 menit</option><option value="90">90 menit</option></select></div>
+<div class="field full"><label>Catatan Jadwal</label><textarea name="note" placeholder="Catatan tambahan (opsional)"></textarea></div>
+</div>
+<div class="actions"><button type="button" class="btn2 secondary" onclick="closeModal('scheduleModal')">Batal</button><button type="button" class="btn2 primary" onclick="saveSchedule()">Simpan Jadwal</button></div>
+</form></div></div>
+
+<div class="modal" id="noteModal"><div class="modalbox"><div class="modalhead"><h2 id="noteModalTitle">Tambah Catatan Terapi</h2><button class="close" type="button" onclick="closeModal('noteModal')">×</button></div>
+<form id="noteForm">
+<input type="hidden" name="noteId">
+<div class="formgrid">
+<div class="field full"><label>Pasien</label><select name="patientId" id="notePatient" required></select></div>
+<div class="field"><label>Tanggal</label><input name="date" type="date" required></div>
+<div class="field"><label>Sesi ke-</label><input name="sessionNo" type="number" min="1" required></div>
+<div class="field"><label>Nama Terapis</label><input name="therapist" required></div>
+<div class="field"><label>Jenis Catatan</label><select name="type"><option>Evaluasi Terapi</option><option>Perkembangan</option><option>Keluhan Pasien</option><option>Anjuran Terapis</option><option>Catatan Umum</option></select></div>
+<div class="field"><label>Status Sesi</label><select name="status" required>
+<option value="Selesai">Selesai</option>
+<option value="Terjadwal">Terjadwal</option>
+<option value="Dibatalkan">Dibatalkan</option>
+</select></div>
+<div class="field"><label>Skala Nyeri (0–10)</label><input name="pain" type="number" min="0" max="10" required></div>
+<div class="field"><label>Fungsi Gerak (0–100%)</label><input name="movement" type="number" min="0" max="100" required></div>
+<div class="field"><label>Kualitas Hidup (0–100%)</label><input name="quality" type="number" min="0" max="100" required></div>
+<div class="field full"><label>Keluhan / Kondisi Saat Ini</label><textarea name="condition" required placeholder="Tuliskan kondisi atau keluhan pasien..."></textarea></div>
+<div class="field full"><label>Catatan / Evaluasi Terapis</label><textarea name="note" required placeholder="Tuliskan hasil terapi, perkembangan, respons pasien, dan tindak lanjut..."></textarea></div>
+</div>
+<div class="actions"><button type="button" class="btn2 secondary" onclick="closeModal('noteModal')">Batal</button><button type="button" class="btn2 primary" onclick="saveNote()">Simpan Catatan</button></div>
+</form></div></div>
+
+<div class="modal" id="recipeModal"><div class="modalbox">
+  <div class="modalhead"><h2 id="recipeModalTitle">Tambah Resep / Anjuran</h2><button class="close" onclick="closeModal('recipeModal')">×</button></div>
+  <form id="recipeForm">
+    <input type="hidden" name="id">
+    <div class="formgrid">
+      <div class="field"><label>Jenis</label><select name="type"><option>Resep</option><option>Anjuran</option><option>Latihan</option><option>Herbal</option><option>Lainnya</option></select></div>
+      <div class="field"><label>Nama Resep / Anjuran</label><input name="nama" required placeholder="Contoh: Latihan Punggung"></div>
+      <div class="field"><label>Dosis / Frekuensi</label><input name="dosis" required placeholder="Contoh: 3x seminggu"></div>
+      <div class="field"><label>Tanggal</label><input name="date" type="date" required></div>
+      <div class="field" style="grid-column:1/-1"><label>Catatan Tambahan</label><textarea name="catatan" rows="4" placeholder="Petunjuk atau keterangan tambahan"></textarea></div>
+    </div>
+    <div class="actions"><button type="button" class="btn2 secondary" onclick="closeModal('recipeModal')">Batal</button><button type="button" class="btn2 primary" onclick="saveRecipeForm()">Simpan</button></div>
+  </form>
+</div></div>
+
+<div id="printReport"></div><script>
+const KEY='asdty_monitoring_terapi_v2';
+const SCHEDULE_KEY='asdty_monitoring_jadwal_v1';
+const NOTES_KEY='asdty_monitoring_catatan_v1';
+let therapyNotes=[];
+try{therapyNotes=JSON.parse(localStorage.getItem(NOTES_KEY)||'[]');if(!Array.isArray(therapyNotes))therapyNotes=[];}catch(e){therapyNotes=[];}
+let schedules=[];
+try{schedules=JSON.parse(localStorage.getItem(SCHEDULE_KEY)||'[]');if(!Array.isArray(schedules))schedules=[];}catch(e){schedules=[];}
+const demo=[{id:'P-260412-001',name:'Budi Santoso',age:56,gender:'Laki-laki',condition:'Hipertensi, Nyeri Punggung',therapist:'Rizky Pratama',program:'Nyeri Punggung',target:12,registered:'2026-04-12',sessions:[{date:'2026-04-12',pain:8,movement:30,quality:22,complaint:'Nyeri punggung bawah',note:'Kondisi awal'},{date:'2026-04-19',pain:7,movement:42,quality:35,complaint:'Nyeri saat bergerak',note:'Mulai ada respons'},{date:'2026-04-23',pain:6,movement:50,quality:45,complaint:'Nyeri punggung',note:'Gerak membaik'},{date:'2026-04-26',pain:5,movement:58,quality:55,complaint:'Nyeri punggung bawah',note:'Sedikit membaik'},{date:'2026-05-03',pain:5,movement:68,quality:65,complaint:'Nyeri saat duduk',note:'Ada perbaikan'},{date:'2026-05-06',pain:4,movement:75,quality:75,complaint:'Nyeri punggung bawah',note:'Membaik'}]}];
+let stored=localStorage.getItem(KEY);
+let patients;
+try{patients=stored===null?JSON.parse(JSON.stringify(demo)):JSON.parse(stored);}
+catch(e){patients=JSON.parse(JSON.stringify(demo));}
+if(!Array.isArray(patients))patients=JSON.parse(JSON.stringify(demo));
+let current=patients.length?patients[0].id:'';
+const save=()=>localStorage.setItem(KEY,JSON.stringify(patients)); const fmt=d=>new Date(d+'T00:00:00').toLocaleDateString('id-ID',{day:'numeric',month:'short',year:'numeric'});
+function renderSelect(){const el=document.getElementById('patientSelect');if(!el)return;el.innerHTML=patients.length?patients.map(p=>`<option value="${p.id}" ${p.id===current?'selected':''}>${p.name} · ${p.id}</option>`).join(''):'<option value="">Belum ada pasien</option>'}
+
+function cleanStoredText(value){
+  let text=String(value??'');
+
+  // Data lama Blogger pernah menyimpan separator sebagai teks:
+  // &#183; / &amp;#183; / &amp;amp;#183; / &middot;
+  // Untuk field data, separator lama tersebut dibuang langsung.
+  for(let i=0;i<6;i++){
+    const before=text;
+    text=text
+      .replace(/&(?:amp;)*#0*183;/gi,' ')
+      .replace(/&(?:amp;)*middot;/gi,' ')
+      .replace(/&#0*183;/gi,' ')
+      .replace(/&middot;/gi,' ')
+      .replace(/·/g,' ');
+    if(text===before)break;
+  }
+
+  return text.replace(/\s+/g,' ').trim();
+}
+
+function cleanProgramName(value){
+  return cleanStoredText(value)
+    .replace(/\s+(?:Program\s+\d+x?)$/i,'')
+    .trim();
+}
+
+
+function normalizeLegacyTextData(){
+  let changed=false;
+  patients.forEach(p=>{
+    if(!p)return;
+    ['program','condition','therapist','name'].forEach(key=>{
+      if(typeof p[key]==='string'){
+        const cleaned=(key==='program'?cleanProgramName(p[key]):cleanStoredText(p[key]));
+        if(cleaned!==p[key]){
+          p[key]=cleaned;
+          changed=true;
+        }
+      }
+    });
+    if(Array.isArray(p.sessions)){
+      p.sessions.forEach(s=>{
+        if(!s)return;
+        ['complaint','note','therapist'].forEach(key=>{
+          if(typeof s[key]==='string'){
+            const cleaned=cleanStoredText(s[key]);
+            if(cleaned!==s[key]){
+              s[key]=cleaned;
+              changed=true;
+            }
+          }
+        });
+      });
+    }
+    if(Array.isArray(p.recipes)){
+      p.recipes.forEach(r=>{
+        if(!r)return;
+        ['nama','dosis','catatan','type'].forEach(key=>{
+          if(typeof r[key]==='string'){
+            const cleaned=cleanStoredText(r[key]);
+            if(cleaned!==r[key]){
+              r[key]=cleaned;
+              changed=true;
+            }
+          }
+        });
+      });
+    }
+  });
+  if(changed){
+    try{ localStorage.setItem(STORE,JSON.stringify(patients)); }catch(e){ console.error(e); }
+  }
+}
+
+
+function clampNumber(v,min,max){
+  v=Number(v);
+  return Number.isFinite(v)?Math.max(min,Math.min(max,v)):0;
+}
+function calculateConditionMetrics(p){
+  const sessions=getCanonicalCompletedSessions(p);
+  if(!sessions.length)return {sessions:[],score:0,first:null,last:null,painPct:0,movePct:0,qualityPct:0};
+
+  const first=sessions[0], last=sessions[sessions.length-1];
+  if(sessions.length===1)return {sessions,score:0,first,last,painPct:0,movePct:0,qualityPct:0};
+
+  const firstPain=clampNumber(first.pain,0,10), lastPain=clampNumber(last.pain,0,10);
+  const firstMove=clampNumber(first.movement,0,100), lastMove=clampNumber(last.movement,0,100);
+  const firstQuality=clampNumber(first.quality,0,100), lastQuality=clampNumber(last.quality,0,100);
+
+  // Persentase perubahan terhadap rentang skala masing-masing.
+  const painPct=((firstPain-lastPain)/10)*100;
+  const movePct=lastMove-firstMove;
+  const qualityPct=lastQuality-firstQuality;
+
+  const score=Math.round((painPct+movePct+qualityPct)/3);
+  return {sessions,score:Math.max(-100,Math.min(100,score)),first,last,painPct,movePct,qualityPct};
+}
+function trendLabel(delta,goodWhenPositive=true){
+  const d=Number(delta)||0;
+  if(Math.abs(d)<0.01)return {text:'Stabil',arrow:'→',cls:'condition-flat'};
+  const good=goodWhenPositive?d>0:d<0;
+  return {text:good?'Membaik':'Menurun',arrow:good?'↑':'↓',cls:good?'condition-up':'condition-down'};
+}
+function renderConditionSummary(p){
+  const box=document.getElementById('conditionSummary'); if(!box)return;
+  const m=calculateConditionMetrics(p);
+  if(!m.sessions.length){
+    box.innerHTML='<div class="muted">Belum ada data sesi terapi.</div>';
+    return;
+  }
+
+  const f=m.first,l=m.last;
+  const painDelta=Number(f.pain)-Number(l.pain);
+  const moveDelta=Number(l.movement)-Number(f.movement);
+  const qualityDelta=Number(l.quality)-Number(f.quality);
+
+  const painTrend=trendLabel(painDelta,true);
+  const moveTrend=trendLabel(moveDelta,true);
+  const qualityTrend=trendLabel(qualityDelta,true);
+
+  const painText=m.sessions.length===1
+    ? `Data awal: ${f.pain} / 10`
+    : `${painTrend.text} dari ${f.pain} menjadi ${l.pain}`;
+  const moveText=m.sessions.length===1
+    ? `Data awal: ${f.movement}%`
+    : `${moveTrend.text} dari ${f.movement}% menjadi ${l.movement}%`;
+  const qualityText=m.sessions.length===1
+    ? `Data awal: ${f.quality}%`
+    : `${qualityTrend.text} dari ${f.quality}% menjadi ${l.quality}%`;
+
+  box.innerHTML=`
+    <div class="item">⚡ <b>Nyeri</b><span class="condition-value ${painTrend.cls}">${m.sessions.length>1?painTrend.arrow:''}</span><br><small>${painText}</small></div>
+    <div class="item">🚶 <b>Fungsi Gerak</b><span class="condition-value ${moveTrend.cls}">${m.sessions.length>1?moveTrend.arrow:''}</span><br><small>${moveText}</small></div>
+    <div class="item">💚 <b>Kualitas Hidup</b><span class="condition-value ${qualityTrend.cls}">${m.sessions.length>1?qualityTrend.arrow:''}</span><br><small>${qualityText}</small></div>
+    <div class="summary-note">${m.sessions.length===1?'Perbaikan kondisi mulai dihitung setelah tersedia minimal 2 sesi selesai.':'Ringkasan dihitung otomatis dari sesi selesai pertama dan sesi selesai terbaru.'}</div>`;
+}
+
+
+function escReport(v){
+ return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
+function buildReportChartSVG(sessions){
+ if(!sessions.length)return '<div class="pr-empty">Belum ada data sesi terapi untuk grafik.</div>';
+ const W=760,H=230,L=42,R=16,T=34,B=34,PW=W-L-R,PH=H-T-B;
+ const x=i=>sessions.length===1?L+PW/2:L+(i/(sessions.length-1))*PW;
+ const y=v=>T+PH-(Math.max(0,Math.min(100,Number(v)||0))/100)*PH;
+ const series=[
+  {name:'Nyeri (x10)',color:'#ef5d5d',values:sessions.map(s=>(Number(s.pain)||0)*10)},
+  {name:'Fungsi Gerak',color:'#347de5',values:sessions.map(s=>Number(s.movement)||0)},
+  {name:'Kualitas Hidup',color:'#36a56a',values:sessions.map(s=>Number(s.quality)||0)}
+ ];
+ let out=`<svg class="pr-chart" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">`;
+ for(let v=0;v<=100;v+=20){const yy=y(v);out+=`<line x1="${L}" y1="${yy}" x2="${W-R}" y2="${yy}" stroke="#dfe5ec"/><text x="${L-7}" y="${yy+3}" text-anchor="end" font-size="8" fill="#596779">${v}</text>`;}
+ sessions.forEach((ss,i)=>{const xx=x(i);out+=`<text x="${xx}" y="${H-8}" text-anchor="middle" font-size="8" fill="#596779">S${escReport(ss.sessionNo||i+1)}</text>`;});
+ let lx=L;series.forEach(sr=>{out+=`<circle cx="${lx+4}" cy="12" r="4" fill="${sr.color}"/><text x="${lx+12}" y="15" font-size="8" fill="#333">${sr.name}</text>`;lx+=125;});
+ series.forEach(sr=>{const pts=sr.values.map((v,i)=>`${x(i)},${y(v)}`).join(' ');if(sr.values.length>1)out+=`<polyline points="${pts}" fill="none" stroke="${sr.color}" stroke-width="2"/>`;sr.values.forEach((v,i)=>out+=`<circle cx="${x(i)}" cy="${y(v)}" r="3" fill="${sr.color}"/>`);});
+ return out+'</svg>';
+}
+function buildPatientReport(p){
+ const sessions=getCanonicalCompletedSessions(p);
+ const metrics=calculateConditionMetrics(p);
+ const recipes=Array.isArray(p.recipes)?p.recipes:[];
+ const rawPatientSchedules=[...schedules].filter(s=>s.patientId===p.id);
+ // Sinkronkan tabel Jadwal Terapi dengan seluruh sesi yang benar-benar sudah selesai.
+ // Jika sebuah sesi selesai tidak memiliki record jadwal, buat baris laporan virtual
+ // dari data sesi agar jumlah sesi pada laporan tetap konsisten (mis. 3/3 = 3 baris).
+ const scheduleBySession=new Map();
+ rawPatientSchedules.forEach(s=>{
+   const no=Number(s.sessionNo)||0;
+   if(no && !scheduleBySession.has(no))scheduleBySession.set(no,{...s});
+ });
+ sessions.forEach(ss=>{
+   const no=Number(ss.sessionNo)||0;
+   if(!no)return;
+   if(scheduleBySession.has(no)){
+     const row=scheduleBySession.get(no);
+     // Sesi kanonik adalah sumber kebenaran untuk sesi yang sudah selesai.
+     row.status='Selesai';
+     if(!row.date && ss.date)row.date=ss.date;
+     if(!row.therapist)row.therapist=ss.therapist||p.therapist||'';
+     if(!row.note && ss.note)row.note=ss.note;
+   }else{
+     scheduleBySession.set(no,{
+       id:'REPORT-'+p.id+'-'+no,patientId:p.id,sessionNo:no,
+       date:ss.date||'',time:'',duration:'',therapist:ss.therapist||p.therapist||'',
+       status:'Selesai',note:ss.note||''
+     });
+   }
+ });
+ // Pertahankan juga jadwal mendatang/belum selesai yang belum mempunyai sesi selesai.
+ rawPatientSchedules.forEach(s=>{
+   const no=Number(s.sessionNo)||0;
+   if(!no) scheduleBySession.set('raw-'+String(s.id||Math.random()),{...s});
+ });
+ const patientSchedules=[...scheduleBySession.values()].sort((a,b)=>(Number(a.sessionNo)||999999)-(Number(b.sessionNo)||999999)||String(a.date||'').localeCompare(String(b.date||'')));
+ const last=sessions[sessions.length-1];
+ const first=sessions[0];
+ const sessionRows=sessions.length?sessions.map(s=>`<tr><td>${escReport(s.sessionNo)}</td><td>${escReport(fmt(s.date))}</td><td>${escReport(s.pain)}/10</td><td>${escReport(s.movement)}%</td><td>${escReport(s.quality)}%</td><td>${escReport(s.complaint||'-')}</td><td>${escReport(s.note||'-')}</td></tr>`).join(''):'<tr><td colspan="7">Belum ada sesi selesai.</td></tr>';
+ const scheduleRows=patientSchedules.length?patientSchedules.map(s=>`<tr><td>${escReport(s.sessionNo||'-')}</td><td>${s.date?escReport(fmt(s.date)):'-'}</td><td>${escReport(s.time||'-')}</td><td>${s.duration?escReport(s.duration)+' menit':'-'}</td><td>${escReport(s.therapist||p.therapist||'-')}</td><td>${escReport(s.status||'-')}</td><td>${escReport(s.note||'-')}</td></tr>`).join(''):'<tr><td colspan="7">Belum ada jadwal terapi.</td></tr>';
+ const recipeRows=recipes.length?recipes.map(r=>`<tr><td>${escReport(r.type||'Anjuran')}</td><td>${escReport(r.nama||'-')}</td><td>${escReport(r.dosis||'-')}</td><td>${escReport(r.catatan||'-')}</td></tr>`).join(''):'<tr><td colspan="4">Belum ada resep atau anjuran.</td></tr>';
+ let condition='Belum Dievaluasi';if(sessions.length===1)condition='Data Awal';else if(metrics.score>0)condition='Membaik';else if(metrics.score<0)condition='Perlu Evaluasi';else if(sessions.length>1)condition='Stabil';
+ const painProgress=!first?'-':sessions.length===1?`${escReport(first.pain)}/10 (data awal)`: `${escReport(first.pain)}/10 → ${escReport(last.pain)}/10`;
+ const moveProgress=!first?'-':sessions.length===1?`${escReport(first.movement)}% (data awal)`: `${escReport(first.movement)}% → ${escReport(last.movement)}%`;
+ const qualityProgress=!first?'-':sessions.length===1?`${escReport(first.quality)}% (data awal)`: `${escReport(first.quality)}% → ${escReport(last.quality)}%`;
+ return `<div class="pr-head"><h1>LAPORAN MONITORING TERAPI</h1><div>ASDTY Healing Point · Monitoring Terapi Pengobatan Umum</div></div>
+ <div class="pr-grid"><div><b>ID Pasien:</b> ${escReport(p.id)}</div><div><b>Nama:</b> ${escReport(p.name)}</div><div><b>Usia:</b> ${escReport(p.age)} tahun</div><div><b>Jenis Kelamin:</b> ${escReport(p.gender)}</div><div><b>Program:</b> ${escReport(cleanProgramName(p.program))}</div><div><b>Terapis:</b> ${escReport(p.therapist||'-')}</div><div><b>Target:</b> ${escReport(p.target)} sesi</div><div><b>Sesi Selesai:</b> ${sessions.length}/${escReport(p.target)}</div></div>
+ <div class="pr-box"><h3>Kemajuan Terapi</h3><div class="pr-grid"><div><b>Perbaikan Kondisi:</b> ${metrics.score>=0?'+':''}${metrics.score}%</div><div><b>Kondisi Terakhir:</b> ${condition}</div><div><b>Nyeri:</b> ${painProgress}</div><div><b>Fungsi Gerak:</b> ${moveProgress}</div><div><b>Kualitas Hidup:</b> ${qualityProgress}</div><div><b>Pembaruan:</b> ${last?escReport(fmt(last.date)):'-'}</div></div></div>
+ <div class="pr-box pr-chart-box"><h3>Grafik Kemajuan Terapi</h3>${buildReportChartSVG(sessions)}</div>
+ <div class="pr-box"><h3>Jadwal Terapi</h3><table><thead><tr><th>Sesi</th><th>Tanggal</th><th>Jam</th><th>Durasi</th><th>Terapis</th><th>Status</th><th>Catatan</th></tr></thead><tbody>${scheduleRows}</tbody></table></div>
+ <div class="pr-box"><h3>Riwayat Sesi Terapi</h3><table><thead><tr><th>Sesi</th><th>Tanggal</th><th>Nyeri</th><th>Gerak</th><th>Kualitas</th><th>Keluhan</th><th>Catatan</th></tr></thead><tbody>${sessionRows}</tbody></table></div>
+ <div class="pr-box"><h3>Resep &amp; Anjuran</h3><table><thead><tr><th>Jenis</th><th>Nama</th><th>Dosis/Frekuensi</th><th>Catatan</th></tr></thead><tbody>${recipeRows}</tbody></table></div>
+ <div class="pr-sign"><div>Yogyakarta, ${escReport(fmt(new Date().toISOString().slice(0,10)))}<br><br><br><b>${escReport(p.therapist||'Terapis')}</b><br><small>Terapis</small></div></div>`;
+}
+function printPatientReport(){
+ const p=patients.find(x=>x.id===current)||patients[0];if(!p){alert('Belum ada pasien yang dipilih.');return;}
+ const reportHTML=buildPatientReport(p),w=window.open('', '_blank', 'width=1000,height=800');if(!w){alert('Popup cetak diblokir browser. Izinkan pop-up untuk halaman ini, lalu klik Cetak Laporan lagi.');return;}
+ const printCSS=`@page{size:A4 portrait;margin:8mm}*{box-sizing:border-box}html,body{margin:0;padding:0;background:#fff;color:#111;font-family:Arial,sans-serif;font-size:9pt;line-height:1.22}body{width:194mm;margin:0 auto}.pr-head{border-bottom:1.5px solid #111;padding:0 0 5px;margin:0 0 6px}.pr-head h1{font-size:18pt;margin:0 0 2px}.pr-head div{font-size:9.5pt}.pr-grid{display:grid;grid-template-columns:1fr 1fr;gap:3px 16px;margin:5px 0}.pr-box{border:1px solid #bbb;border-radius:5px;padding:6px 8px;margin:6px 0;break-inside:avoid;page-break-inside:avoid}.pr-box h3{font-size:11pt;margin:0 0 4px}.pr-chart-box{padding-bottom:3px}.pr-chart{display:block;width:100%;height:54mm}.pr-empty{text-align:center;padding:18px;color:#777}table{width:100%;border-collapse:collapse;font-size:7.3pt;line-height:1.12}th,td{border:1px solid #bbb;padding:2.5px 3px;text-align:left;vertical-align:top}th{background:#f2f2f2;-webkit-print-color-adjust:exact;print-color-adjust:exact}.pr-sign{margin-top:8px;display:flex;justify-content:flex-end;break-inside:avoid}.pr-sign>div{text-align:center;min-width:170px;font-size:8.5pt}@media print{html,body{width:auto!important;overflow:visible!important}}`;
+ w.document.open();w.document.write('<!doctype html><html><head><meta charset="utf-8"><title>Laporan Monitoring Terapi - '+escReport(p.name)+'</title><style>'+printCSS+'</style></head><body>'+reportHTML+'<script>window.onload=function(){setTimeout(function(){window.focus();window.print();},350)}<\/script></body></html>');w.document.close();
+}
+
+function render(){
+  normalizeLegacyTextData();
+  if(!patients.length){renderSelect();return;}
+  const p=patients.find(x=>x.id===current)||patients[0];
+  current=p.id;
+  renderSelect();
+  const completedSessions=getCanonicalCompletedSessions(p);
+  const n=completedSessions.length,
+        last=n?completedSessions[n-1]:null,
+        first=n?completedSessions[0]:null,
+        pct=Math.min(100,Math.round(n/Math.max(1,p.target)*100)),
+        remain=Math.max(0,p.target-n),
+        improve=calculateConditionMetrics(p).score;
+
+  document.getElementById('patientName').textContent=p.name;
+  document.getElementById('patientMeta').innerHTML=`${p.age} Tahun, ${p.gender}<br>${p.condition}<br>Terdaftar: ${fmt(p.registered)}`;
+  document.getElementById('patientId').textContent=p.id;
+  document.getElementById('patientTherapist').textContent=p.therapist;
+  document.getElementById('patientProgram').textContent=cleanProgramName(p.program)+' - Program '+p.target+'x';
+  document.getElementById('patientSessions').textContent=`${n} / ${p.target} Sesi`;
+  const programStatus=getProgramStatus(p);
+  const statusPill=document.querySelector('.patient .status .pill');
+  if(statusPill){
+    statusPill.textContent=programStatus.label;
+    statusPill.style.background=programStatus.label==='Selesai'?'#dcfce7':'#dff7e6';
+    statusPill.style.color='#08783f';
+  }
+
+  const circle=document.getElementById('progressCircle');
+  circle.style.background=`conic-gradient(#2f7eea 0 ${pct}%,#e9edf2 ${pct}% 100%)`;
+  circle.setAttribute('data-pct',pct);
+
+
+  const conditionMetrics=calculateConditionMetrics(p);
+  const conditionEl=document.getElementById('lastConditionStatus');
+  if(conditionEl){
+    let label='Belum Dievaluasi', color='#718096';
+    if(conditionMetrics.sessions.length===1){label='Data Awal';color='#718096';}
+    else if(conditionMetrics.score>0){label='Membaik';color='#15915b';}
+    else if(conditionMetrics.score<0){label='Perlu Evaluasi';color='#d64545';}
+    else {label='Stabil';color='#718096';}
+    conditionEl.textContent=label;
+    conditionEl.style.color=color;
+  }
+
+  document.getElementById('lastUpdate').textContent=last?fmt(last.date):'-';
+  document.getElementById('kpiSessions').textContent=`${n} / ${p.target}`;
+  document.getElementById('kpiProgress').textContent=pct+'%';
+  document.getElementById('kpiImprove').textContent=(improve>=0?'+':'')+improve+'%';
+  document.getElementById('kpiRemain').textContent=remain;
+  renderConditionSummary(p);
+
+  document.getElementById('historyBody').innerHTML=[...completedSessions].reverse().map((s,i)=>`<tr><td>${s.sessionNo||n-i}</td><td>${fmt(s.date)}</td><td>${p.therapist}</td><td>${s.complaint}</td><td>${s.pain}</td><td>${s.note}</td></tr>`).join('')||'<tr><td colspan="6">Belum ada sesi terapi.</td></tr>';
+
+  drawCharts(p);
+  renderNextSchedule(p.id);
+  renderLatestNote(p.id);
+}
+function drawCharts(p){
+  renderRecipeSummary(p);
+  const svg=document.getElementById('progressChart');
+  if(!svg)return;
+
+  const sessions=getCanonicalCompletedSessions(p);
+  const W=900,H=420,L=58,R=22,T=58,B=52;
+  const PW=W-L-R,PH=H-T-B;
+  const esc=s=>String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+
+  if(!sessions.length){
+    svg.innerHTML='<text x="450" y="210" text-anchor="middle" font-size="18" fill="#8290a3">Belum ada data sesi terapi</text>';
+    return;
+  }
+
+  const x=i=>sessions.length===1?L+PW/2:L+(i/(sessions.length-1))*PW;
+  const y=v=>T+PH-(Math.max(0,Math.min(100,v))/100)*PH;
+
+  let out='';
+  // Background
+  out+=`<rect x="${L}" y="${T}" width="${PW}" height="${PH}" fill="#fff"/>`;
+
+  // Grid + Y labels
+  for(let v=0;v<=100;v+=20){
+    const yy=y(v);
+    out+=`<line x1="${L}" y1="${yy}" x2="${W-R}" y2="${yy}" stroke="#e7edf5" stroke-width="1"/>`;
+    out+=`<text x="${L-12}" y="${yy+4}" text-anchor="end" font-size="12" fill="#718096">${v}</text>`;
+  }
+
+  // X labels
+  sessions.forEach((s,i)=>{
+    const xx=x(i);
+    out+=`<line x1="${xx}" y1="${T}" x2="${xx}" y2="${H-B}" stroke="#f0f3f7" stroke-width="1"/>`;
+    out+=`<text x="${xx}" y="${H-B+24}" text-anchor="middle" font-size="12" fill="#53657a">Sesi ${s.sessionNo||i+1}</text>`;
+  });
+
+  const series=[
+    {name:'Nyeri (x10)',color:'#ef5d5d',values:sessions.map(s=>Number(s.pain)*10)},
+    {name:'Fungsi Gerak',color:'#347de5',values:sessions.map(s=>Number(s.movement))},
+    {name:'Kualitas Hidup',color:'#36a56a',values:sessions.map(s=>Number(s.quality))}
+  ];
+
+  // Legend
+  let lx=L;
+  series.forEach(s=>{
+    out+=`<circle cx="${lx+6}" cy="22" r="5" fill="${s.color}"/><text x="${lx+18}" y="27" font-size="12" fill="#53657a">${esc(s.name)}</text>`;
+    lx+=155;
+  });
+
+  series.forEach(s=>{
+    const pts=s.values.map((v,i)=>`${x(i)},${y(v)}`).join(' ');
+    if(s.values.length>1)out+=`<polyline points="${pts}" fill="none" stroke="${s.color}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>`;
+    s.values.forEach((v,i)=>{
+      out+=`<circle cx="${x(i)}" cy="${y(v)}" r="5" fill="${s.color}" stroke="#fff" stroke-width="2"><title>${esc(s.name)} - Sesi ${i+1}: ${v}</title></circle>`;
+    });
+  });
+
+  svg.innerHTML=out;
+}
+function openModal(id){document.getElementById(id).classList.add('open')}function closeModal(id){document.getElementById(id).classList.remove('open')}function openSession(){openModal('sessionModal');document.querySelector('#sessionForm [name="date"]').value=new Date().toISOString().slice(0,10)}function switchPatient(id){current=id;render()}function flash(){const n=document.getElementById('notice');n.style.display='block';setTimeout(()=>n.style.display='none',2200)}
+const patientFormEl=document.getElementById('patientForm');
+const sessionFormEl=document.getElementById('sessionForm');
+const patientSelectEl=document.getElementById('patientSelect');
+const noticeEl=document.getElementById('notice');
+
+function savePatient(){
+  const form=document.getElementById('patientForm');
+  if(!form.reportValidity()) return;
+  const f=new FormData(form);
+  const id='P-'+Date.now().toString().slice(-8);
+  patients.push({
+    id:id,
+    name:String(f.get('name')||'').trim(),
+    age:Number(f.get('age')),
+    gender:String(f.get('gender')||''),
+    condition:String(f.get('condition')||'').trim(),
+    therapist:String(f.get('therapist')||'').trim(),
+    program:String(f.get('program')||'').trim(),
+    target:Number(f.get('target')),
+    registered:String(f.get('registered')||''),
+    sessions:[]
+  });
+  current=id;
+  save();
+  renderPatientTable();
+  form.reset();
+  closeModal('patientModal');
+  try{render();}catch(err){console.error('Dashboard render:',err);}
+  flash();
+}
+function saveSession(){
+  const form=document.getElementById('sessionForm');
+  if(!form.reportValidity()) return;
+  const f=new FormData(form);
+  const p=patients.find(x=>x.id===current);
+  if(!p){alert('Pasien tidak ditemukan.');return;}
+  p.sessions.push({
+    date:String(f.get('date')||''),
+    pain:Number(f.get('pain')),
+    movement:Number(f.get('movement')),
+    quality:Number(f.get('quality')),
+    complaint:String(f.get('complaint')||'').trim(),
+    note:String(f.get('note')||'').trim(),
+    sessionNo:(p.sessions.length+1),
+    status:'Selesai'
+  });
+  p.sessions.sort((a,b)=>(Number(a.sessionNo)||999999)-(Number(b.sessionNo)||999999)||String(a.date).localeCompare(String(b.date)));
+  save(); render(); renderPatientTable();
+  form.reset(); closeModal('sessionModal'); flash();
+}
+
+
+function setActiveNav(label){
+  document.querySelectorAll('.nav a').forEach(a=>a.classList.remove('active'));
+  [...document.querySelectorAll('.nav a')].find(a=>a.textContent.includes(label))?.classList.add('active');
+}
+function showPatientData(){
+  hideAllViews();
+  const dash=document.getElementById('dashboardView');
+  const data=document.getElementById('patientDataView');
+  if(dash) dash.style.display='none';
+  if(data) data.style.display='block';
+  setActiveNav('Data Pasien');
+  renderPatientTable();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function showDashboardForPatient(id){
+  current=id;
+  hideAllViews();
+  document.getElementById('dashboardView').style.display='block';
+  setActiveNav('Dashboard');
+  setTimeout(function(){
+    render();
+    
+  },60);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function renderPatientTable(){
+  const body=document.getElementById('patientTableBody');
+  if(!body)return;
+  const q=(document.getElementById('patientSearch')?.value||'').toLowerCase().trim();
+  const filtered=patients.filter(p=>[p.id,p.name,p.condition,p.therapist,p.program].join(' ').toLowerCase().includes(q));
+  document.getElementById('patientCount').textContent=filtered.length+' pasien';
+  body.innerHTML=filtered.map(p=>`<tr>
+    <td><b>${p.id}</b></td><td>${p.name}</td><td>${p.age} th</td><td>${p.condition}</td><td>${p.therapist}</td>
+    <td>${p.program}</td><td>${p.sessions.length} / ${p.target}</td>
+    <td><div class="action-group">
+      <button class="action-btn action-monitor" type="button" onclick="showDashboardForPatient(decodeURIComponent('${encodeURIComponent(p.id)}'))">Monitoring</button>
+      <button class="action-btn action-edit" type="button" onclick="openEditPatient(decodeURIComponent('${encodeURIComponent(p.id)}'))">Edit</button>
+      <button class="action-btn action-delete" type="button" onclick="deletePatient(decodeURIComponent('${encodeURIComponent(p.id)}'))">Hapus</button>
+    </div></td></tr>`).join('')||'<tr><td colspan="8">Pasien tidak ditemukan.</td></tr>';
+}
+function openEditPatient(id){
+  const p=patients.find(x=>x.id===id); if(!p)return;
+  const f=document.getElementById('editPatientForm');
+  ['id','name','age','gender','condition','therapist','program','target','registered'].forEach(k=>f.elements[k].value=p[k]??'');
+  openModal('editPatientModal');
+}
+function deletePatient(id){
+  const p=patients.find(x=>x.id===id);
+  if(!p){alert('Data pasien tidak ditemukan.');return;}
+  if(!confirm('Hapus data pasien '+p.name+'?\n\nRiwayat sesi pasien ini juga akan terhapus.')) return;
+
+  patients=patients.filter(x=>x.id!==id);
+  localStorage.setItem(KEY,JSON.stringify(patients));
+
+  if(current===id){
+    current=patients.length ? patients[0].id : '';
+  }
+
+  // Perbarui tabel langsung tanpa perlu refresh halaman.
+  renderPatientTable();
+  renderSelect();
+
+  // Dashboard hanya dirender bila masih ada pasien.
+  if(patients.length){
+    try{render();}catch(err){console.error('Dashboard render:',err);}
+  }
+
+  flash();
+}
+function saveEditPatient(){
+  const form=document.getElementById('editPatientForm');
+  if(!form.reportValidity()) return;
+  const f=new FormData(form), id=String(f.get('id')||''), p=patients.find(x=>x.id===id);
+  if(!p){alert('Data pasien tidak ditemukan.');return;}
+  p.name=String(f.get('name')||'').trim();
+  p.age=Number(f.get('age'));
+  p.gender=String(f.get('gender')||'');
+  p.condition=String(f.get('condition')||'').trim();
+  p.therapist=String(f.get('therapist')||'').trim();
+  p.program=String(f.get('program')||'').trim();
+  p.target=Number(f.get('target'));
+  p.registered=String(f.get('registered')||'');
+  save(); render(); renderPatientTable();
+  closeModal('editPatientModal'); flash();
+}
+
+
+
+function hideAllViews(){
+  const ids=['dashboardView','patientDataView','scheduleView','notesView','evaluationView','recipesView'];
+  ids.forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none';});
+}
+
+
+function showEvaluationView(){
+  hideAllViews();
+  const v=document.getElementById('evaluationView');if(v)v.style.display='block';
+  setActiveNav('Evaluasi & Grafik');
+  refreshEvaluationPatients();
+  const id=(current&&patients.some(p=>p.id===current))?current:(patients[0]?.id||'');
+  const sel=document.getElementById('evaluationPatient');if(sel)sel.value=id;
+  renderEvaluation(id);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function refreshEvaluationPatients(){
+  const sel=document.getElementById('evaluationPatient');if(!sel)return;
+  sel.innerHTML=patients.length?patients.map(p=>`<option value="${p.id}">${p.name} · ${p.id}</option>`).join(''):'<option value="">Belum ada pasien</option>';
+}
+function renderEvaluation(patientId){
+  const p=patients.find(x=>x.id===patientId);
+  const svg=document.getElementById('evaluationChart');
+  const comp=document.getElementById('evaluationComparison');
+  const concl=document.getElementById('evaluationConclusion');
+  if(!p){
+    document.getElementById('evalSessions').textContent='0 / 0';
+    document.getElementById('evalProgress').textContent='0%';
+    document.getElementById('evalPain').textContent='-';
+    document.getElementById('evalMovement').textContent='-';
+    if(svg)svg.innerHTML='<text x="450" y="210" text-anchor="middle" font-size="18" fill="#8290a3">Belum ada pasien</text>';
+    if(comp)comp.innerHTML='';
+    if(concl)concl.textContent='Belum ada data evaluasi.';
+    return;
+  }
+  current=p.id;
+  const s=getCanonicalCompletedSessions(p), n=s.length, pct=Math.min(100,Math.round(n/Math.max(1,p.target)*100));
+  document.getElementById('evalSessions').textContent=n+' / '+p.target;
+  document.getElementById('evalProgress').textContent=pct+'%';
+
+  if(!n){
+    document.getElementById('evalPain').textContent='-';
+    document.getElementById('evalMovement').textContent='-';
+    svg.innerHTML='<text x="450" y="210" text-anchor="middle" font-size="18" fill="#8290a3">Belum ada data sesi terapi</text>';
+    comp.innerHTML='<p class="muted">Input sesi terapi terlebih dahulu untuk membuat evaluasi.</p>';
+    concl.textContent='Belum dapat membuat kesimpulan karena belum ada data sesi terapi.';
+    return;
+  }
+
+  const first=s[0], last=s[n-1];
+  document.getElementById('evalPain').textContent=first.pain+' → '+last.pain;
+  document.getElementById('evalMovement').textContent=last.movement+'%';
+
+  drawEvaluationSVG(s);
+
+  const painImprove=Math.round(((Number(first.pain)-Number(last.pain))/Math.max(1,Number(first.pain)))*100);
+  const moveChange=Number(last.movement)-Number(first.movement);
+  const qualityChange=Number(last.quality)-Number(first.quality);
+
+  const rows=[
+    {name:'Nyeri',a:first.pain,b:last.pain,suffix:' / 10',bar:Math.max(0,100-Number(last.pain)*10),change:(painImprove>=0?'-':' +')+Math.abs(Number(first.pain)-Number(last.pain))},
+    {name:'Fungsi Gerak',a:first.movement,b:last.movement,suffix:'%',bar:last.movement,change:(moveChange>=0?'+':'')+moveChange+'%'},
+    {name:'Kualitas Hidup',a:first.quality,b:last.quality,suffix:'%',bar:last.quality,change:(qualityChange>=0?'+':'')+qualityChange+'%'}
+  ];
+  comp.innerHTML=rows.map(r=>`<div class="compare-row"><div class="compare-head"><span>${r.name}</span><span>${r.change}</span></div><div class="compare-values"><span>Awal: ${r.a}${r.suffix}</span><span>Terbaru: ${r.b}${r.suffix}</span></div><div class="progressbar"><span style="width:${Math.max(0,Math.min(100,r.bar))}%"></span></div></div>`).join('');
+
+  let status='perkembangan masih perlu dipantau';
+  if(painImprove>0 && moveChange>0 && qualityChange>0)status='menunjukkan perkembangan positif pada seluruh indikator yang dicatat';
+  else if(moveChange>0 || qualityChange>0 || painImprove>0)status='menunjukkan perkembangan pada sebagian indikator yang dicatat';
+  else if(moveChange<0 || qualityChange<0 || painImprove<0)status='menunjukkan adanya indikator yang menurun dan perlu dievaluasi lebih lanjut';
+
+  concl.innerHTML=`<b>Kesimpulan Evaluasi</b><br>Setelah ${n} sesi dari target ${p.target} sesi, data ${p.name} ${status}. Nyeri berubah dari ${first.pain} menjadi ${last.pain}, fungsi gerak dari ${first.movement}% menjadi ${last.movement}%, dan kualitas hidup dari ${first.quality}% menjadi ${last.quality}%.`;
+}
+function drawEvaluationSVG(sessions){
+  const svg=document.getElementById('evaluationChart');if(!svg)return;
+  const W=900,H=420,L=58,R=22,T=58,B=52,PW=W-L-R,PH=H-T-B;
+  const x=i=>sessions.length===1?L+PW/2:L+(i/(sessions.length-1))*PW;
+  const y=v=>T+PH-(Math.max(0,Math.min(100,Number(v)))/100)*PH;
+  let out=`<rect x="${L}" y="${T}" width="${PW}" height="${PH}" fill="#fff"/>`;
+  for(let v=0;v<=100;v+=20){const yy=y(v);out+=`<line x1="${L}" y1="${yy}" x2="${W-R}" y2="${yy}" stroke="#e7edf5"/><text x="${L-12}" y="${yy+4}" text-anchor="end" font-size="12" fill="#718096">${v}</text>`;}
+  sessions.forEach((s,i)=>{const xx=x(i);out+=`<line x1="${xx}" y1="${T}" x2="${xx}" y2="${H-B}" stroke="#f0f3f7"/><text x="${xx}" y="${H-B+24}" text-anchor="middle" font-size="12" fill="#53657a">Sesi ${s.sessionNo||i+1}</text>`;});
+  const series=[
+    {name:'Nyeri (x10)',color:'#ef5d5d',values:sessions.map(s=>Number(s.pain)*10)},
+    {name:'Fungsi Gerak',color:'#347de5',values:sessions.map(s=>Number(s.movement))},
+    {name:'Kualitas Hidup',color:'#36a56a',values:sessions.map(s=>Number(s.quality))}
+  ];
+  let lx=L;
+  series.forEach(sr=>{out+=`<circle cx="${lx+6}" cy="22" r="5" fill="${sr.color}"/><text x="${lx+18}" y="27" font-size="12" fill="#53657a">${sr.name}</text>`;lx+=155;});
+  series.forEach(sr=>{
+    const pts=sr.values.map((v,i)=>`${x(i)},${y(v)}`).join(' ');
+    if(sr.values.length>1)out+=`<polyline points="${pts}" fill="none" stroke="${sr.color}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>`;
+    sr.values.forEach((v,i)=>{out+=`<circle cx="${x(i)}" cy="${y(v)}" r="5" fill="${sr.color}" stroke="#fff" stroke-width="2"><title>${sr.name} - Sesi ${i+1}: ${v}</title></circle>`;});
+  });
+  svg.innerHTML=out;
+}
+
+
+
+
+
+function getProgramStatus(p){
+  const done=getCanonicalCompletedSessions(p).length;
+  const target=Math.max(1,Number(p.target)||1);
+  if(done>=target)return {label:'Selesai',className:'done'};
+  if(done>0)return {label:'Aktif',className:'active'};
+  return {label:'Belum Mulai',className:'waiting'};
+}
+
+function getCanonicalCompletedSessions(p){
+  if(!p || !Array.isArray(p.sessions))return [];
+
+  const completed=p.sessions
+    .filter(s=>(s.status||'Selesai')==='Selesai')
+    .map((s,i)=>({...s,__order:i}));
+
+  // Kelompokkan berdasarkan nomor sesi.
+  const groups=new Map();
+  completed.forEach(s=>{
+    const no=Number(s.sessionNo)||0;
+    if(!groups.has(no))groups.set(no,[]);
+    groups.get(no).push(s);
+  });
+
+  const result=[];
+  [...groups.keys()].sort((a,b)=>a-b).forEach(no=>{
+    const items=groups.get(no);
+
+    // Jika nomor sesi duplikat, prioritaskan record yang berasal dari Catatan Terapi.
+    // Bila sama-sama berasal dari catatan/legacy, pilih record dengan tanggal paling awal
+    // sebagai representasi sesi tersebut.
+    items.sort((a,b)=>{
+      const as=a.sourceNoteId?1:0, bs=b.sourceNoteId?1:0;
+      if(as!==bs)return bs-as;
+      const d=String(a.date||'').localeCompare(String(b.date||''));
+      if(d!==0)return d;
+      return a.__order-b.__order;
+    });
+
+    const chosen={...items[0]};
+    delete chosen.__order;
+    result.push(chosen);
+  });
+
+  return result;
+}
+
+function hardCleanDuplicateSessions(){
+  let changed=false;
+  patients.forEach(p=>{
+    if(!Array.isArray(p.sessions))return;
+
+    // Semua sesi, termasuk non-selesai, dikelompokkan per nomor.
+    const groups=new Map();
+    p.sessions.forEach((s,i)=>{
+      const no=Number(s.sessionNo)||0;
+      if(!groups.has(no))groups.set(no,[]);
+      groups.get(no).push({...s,__order:i});
+    });
+
+    const clean=[];
+    [...groups.keys()].sort((a,b)=>a-b).forEach(no=>{
+      const items=groups.get(no);
+      if(items.length>1)changed=true;
+
+      items.sort((a,b)=>{
+        const as=a.sourceNoteId?1:0, bs=b.sourceNoteId?1:0;
+        if(as!==bs)return bs-as;
+        const d=String(a.date||'').localeCompare(String(b.date||''));
+        if(d!==0)return d;
+        return a.__order-b.__order;
+      });
+
+      const chosen={...items[0]};
+      delete chosen.__order;
+      clean.push(chosen);
+    });
+
+    p.sessions=clean;
+  });
+
+  if(changed)save();
+  return changed;
+}
+
+function normalizePatientSessions(p){
+  if(!p || !Array.isArray(p.sessions))return false;
+  let changed=false;
+
+  // Pastikan semua record memiliki nomor sesi.
+  p.sessions.forEach((s,i)=>{
+    if(!Number(s.sessionNo)){
+      s.sessionNo=i+1;
+      changed=true;
+    }
+    if(!s.status){
+      s.status='Selesai';
+      changed=true;
+    }
+  });
+
+  const byNo=new Map();
+  p.sessions.forEach((s,index)=>{
+    const no=Number(s.sessionNo);
+    const prev=byNo.get(no);
+
+    if(!prev){
+      byNo.set(no,{...s,__index:index});
+      return;
+    }
+
+    // Catatan Terapi yang tersinkron menjadi sumber utama bila ada.
+    const prevSynced=!!prev.sourceNoteId;
+    const curSynced=!!s.sourceNoteId;
+
+    let winner;
+    if(curSynced && !prevSynced) winner={...prev,...s,__index:index};
+    else if(!curSynced && prevSynced) winner={...s,...prev,__index:prev.__index};
+    else {
+      // Bila keduanya sama-sama legacy / sama-sama synced, ambil record terakhir
+      // tetapi pertahankan field yang tidak kosong dari record sebelumnya.
+      winner={...prev,...s,__index:index};
+    }
+
+    byNo.set(no,winner);
+    changed=true;
+  });
+
+  const clean=[...byNo.values()]
+    .sort((a,b)=>Number(a.sessionNo)-Number(b.sessionNo))
+    .map(({__index,...s})=>s);
+
+  if(clean.length!==p.sessions.length)changed=true;
+  p.sessions=clean;
+  return changed;
+}
+
+function normalizeAllPatientSessions(){
+  let changed=false;
+  patients.forEach(p=>{if(normalizePatientSessions(p))changed=true;});
+  if(changed)save();
+}
+
+function syncNoteToPatientSession(note){
+  const p=patients.find(x=>x.id===note.patientId);
+  if(!p)return;
+  if(!Array.isArray(p.sessions))p.sessions=[];
+
+  const no=Number(note.sessionNo);
+  const sessionData={
+    date:note.date,
+    pain:Number(note.pain),
+    movement:Number(note.movement),
+    quality:Number(note.quality),
+    complaint:note.condition,
+    note:note.note,
+    sessionNo:no,
+    sourceNoteId:note.id,
+    status:note.status||'Selesai'
+  };
+
+  // SATU NOMOR SESI = SATU RECORD.
+  // Cari dahulu berdasarkan source note, lalu nomor sesi.
+  let idx=p.sessions.findIndex(s=>s.sourceNoteId===note.id);
+  if(idx<0)idx=p.sessions.findIndex(s=>Number(s.sessionNo)===no);
+
+  if(idx>=0){
+    p.sessions[idx]={...p.sessions[idx],...sessionData};
+  }else{
+    p.sessions.push(sessionData);
+  }
+
+  normalizePatientSessions(p);
+  save();
+}
+function removeSyncedNoteSession(note){
+  const p=patients.find(x=>x.id===note.patientId);
+  if(!p||!Array.isArray(p.sessions))return;
+  p.sessions=p.sessions.filter(s=>s.sourceNoteId!==note.id);
+  save();
+}
+
+function showNotesView(){
+  hideAllViews();
+  const v=document.getElementById('notesView');if(v)v.style.display='block';
+  setActiveNav('Catatan Terapi');
+  refreshNotePatientOptions();
+  renderNotes();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function refreshNotePatientOptions(){
+  const filter=document.getElementById('notesPatientFilter');
+  const select=document.getElementById('notePatient');
+  const opts=patients.map(p=>`<option value="${p.id}">${p.name} · ${p.id}</option>`).join('');
+  if(filter){const val=filter.value;filter.innerHTML='<option value="">Semua Pasien</option>'+opts;filter.value=val;}
+  if(select)select.innerHTML=opts||'<option value="">Belum ada pasien</option>';
+}
+function openNoteModal(){
+  if(!patients.length){alert('Tambahkan pasien terlebih dahulu.');return;}
+  refreshNotePatientOptions();
+  const f=document.getElementById('noteForm');f.reset();
+  f.elements.noteId.value='';
+  document.getElementById('noteModalTitle').textContent='Tambah Catatan Terapi';
+  f.elements.date.value=new Date().toISOString().slice(0,10);
+  const p=patients.find(x=>x.id===current)||patients[0];
+  f.elements.patientId.value=p.id;
+  f.elements.therapist.value=p.therapist||'';
+  f.elements.sessionNo.value=Math.max(1,p.sessions?.length||1);
+  openModal('noteModal');
+}
+function saveNote(){
+  const f=document.getElementById('noteForm');
+  if(!f.reportValidity())return;
+  const fd=new FormData(f), nid=String(fd.get('noteId')||'');
+  const item={
+    id:nid||('C-'+Date.now().toString().slice(-10)),
+    patientId:String(fd.get('patientId')),
+    date:String(fd.get('date')),
+    sessionNo:Number(fd.get('sessionNo')),
+    therapist:String(fd.get('therapist')||'').trim(),
+    type:String(fd.get('type')||'Catatan Umum'),
+    status:String(fd.get('status')||'Selesai'),
+    condition:String(fd.get('condition')||'').trim(),
+    note:String(fd.get('note')||'').trim(),
+    pain:Number(fd.get('pain')),
+    movement:Number(fd.get('movement')),
+    quality:Number(fd.get('quality'))
+  };
+  if(nid){const i=therapyNotes.findIndex(x=>x.id===nid);if(i>=0)therapyNotes[i]=item;}else{therapyNotes.push(item);}
+  localStorage.setItem(NOTES_KEY,JSON.stringify(therapyNotes));
+  syncNoteToPatientSession(item);
+  current=item.patientId;
+  closeModal('noteModal');
+  renderNotes();
+  renderLatestNote(current);
+  try{render();}catch(e){console.error(e);}
+  flash();
+}
+function editNote(id){
+  const n=therapyNotes.find(x=>x.id===id);if(!n)return;
+  refreshNotePatientOptions();
+  const f=document.getElementById('noteForm');
+  f.elements.noteId.value=n.id;f.elements.patientId.value=n.patientId;f.elements.date.value=n.date;
+  f.elements.sessionNo.value=n.sessionNo;f.elements.therapist.value=n.therapist;f.elements.type.value=n.type;
+  f.elements.condition.value=n.condition;f.elements.note.value=n.note;
+  f.elements.status.value=n.status||'Selesai';
+  f.elements.pain.value=n.pain??'';f.elements.movement.value=n.movement??'';f.elements.quality.value=n.quality??'';
+  document.getElementById('noteModalTitle').textContent='Edit Catatan Terapi';
+  openModal('noteModal');
+}
+function deleteNote(id){
+  const n=therapyNotes.find(x=>x.id===id);if(!n)return;
+  if(!confirm('Hapus catatan terapi ini?'))return;
+  removeSyncedNoteSession(n);
+  therapyNotes=therapyNotes.filter(x=>x.id!==id);
+  localStorage.setItem(NOTES_KEY,JSON.stringify(therapyNotes));
+  renderNotes();renderLatestNote(current);
+  try{render();}catch(e){console.error(e);}
+  flash();
+}
+function renderNotes(){
+  const grid=document.getElementById('notesGrid');if(!grid)return;
+  const pf=document.getElementById('notesPatientFilter')?.value||'';
+  const q=(document.getElementById('notesSearch')?.value||'').toLowerCase().trim();
+  const arr=[...therapyNotes].filter(n=>{
+    const p=patients.find(x=>x.id===n.patientId);
+    const txt=((p?.name||'')+' '+n.therapist+' '+n.type+' '+n.condition+' '+n.note).toLowerCase();
+    return (!pf||n.patientId===pf)&&(!q||txt.includes(q));
+  }).sort((a,b)=>(b.date+String(b.sessionNo).padStart(4,'0')).localeCompare(a.date+String(a.sessionNo).padStart(4,'0')));
+  document.getElementById('notesCount').textContent=arr.length+' catatan';
+  grid.innerHTML=arr.map(n=>{
+    const p=patients.find(x=>x.id===n.patientId);
+    return `<div class="card note-card">
+      <span class="note-badge">${n.type}</span>
+      <span class="note-badge" style="${(n.status||'Selesai')==='Selesai'?'background:#e8f8ef;color:#16834b':(n.status==='Dibatalkan'?'background:#ffeaea;color:#d93025':'background:#fff4d8;color:#a86400')}">${n.status||'Selesai'}</span>
+      <h3>${p?.name||'Pasien tidak ditemukan'}</h3>
+      <div class="note-meta">${fmt(n.date)} · Sesi ke-${n.sessionNo} · Terapis: ${n.therapist}</div>
+      <div class="note-body"><b>Kondisi/Keluhan:</b>\n${n.condition}\n\n<b>Catatan Terapis:</b>\n${n.note}</div>
+      <div class="note-actions"><button type="button" class="action-btn action-monitor" onclick="showDashboardForPatient('${n.patientId}')">Monitoring</button><button type="button" class="action-btn action-edit" onclick="editNote('${n.id}')">Edit</button><button type="button" class="action-btn action-delete" onclick="deleteNote('${n.id}')">Hapus</button></div>
+    </div>`;
+  }).join('')||'<div class="card" style="padding:22px">Belum ada catatan terapi.</div>';
+}
+function renderLatestNote(patientId){
+  const box=document.getElementById('latestTherapyNote');if(!box)return;
+  const n=[...therapyNotes].filter(x=>x.patientId===patientId)
+    .sort((a,b)=>(b.date+String(b.sessionNo).padStart(4,'0')).localeCompare(a.date+String(a.sessionNo).padStart(4,'0')))[0];
+  if(!n){box.innerHTML='<p>Belum ada catatan terapi.</p>';return;}
+  box.innerHTML=`<p><b>${n.type} · Sesi ke-${n.sessionNo}</b><br>${n.note}</p>`;
+}
+
+function showScheduleView(){
+  hideAllViews();
+  const v=document.getElementById('scheduleView');if(v)v.style.display='block';
+  setActiveNav('Jadwal Terapi');
+  refreshSchedulePatientOptions();
+  renderSchedules();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function refreshSchedulePatientOptions(){
+  const filter=document.getElementById('schedulePatientFilter');
+  const select=document.getElementById('schedulePatient');
+  const opts=patients.map(p=>`<option value="${p.id}">${p.name} · ${p.id}</option>`).join('');
+  if(filter){const val=filter.value;filter.innerHTML='<option value="">Semua Pasien</option>'+opts;filter.value=val;}
+  if(select)select.innerHTML=opts||'<option value="">Belum ada pasien</option>';
+}
+function openScheduleModal(){
+  if(!patients.length){alert('Tambahkan pasien terlebih dahulu.');return;}
+  refreshSchedulePatientOptions();
+  const f=document.getElementById('scheduleForm');f.reset();
+  f.elements.scheduleId.value='';
+  document.getElementById('scheduleModalTitle').textContent='Tambah Jadwal Terapi';
+  f.elements.date.value=new Date().toISOString().slice(0,10);
+  const p=patients.find(x=>x.id===current)||patients[0];
+  f.elements.patientId.value=p.id;
+  f.elements.therapist.value=p.therapist||'';
+  f.elements.sessionNo.value=(p.sessions?.length||0)+1;
+  openModal('scheduleModal');
+}
+function saveSchedule(){
+  const f=document.getElementById('scheduleForm');
+  if(!f.reportValidity())return;
+  const fd=new FormData(f), sid=String(fd.get('scheduleId')||'');
+  const item={
+    id:sid||('J-'+Date.now().toString().slice(-10)),
+    patientId:String(fd.get('patientId')),
+    date:String(fd.get('date')),time:String(fd.get('time')),
+    sessionNo:Number(fd.get('sessionNo')),therapist:String(fd.get('therapist')||'').trim(),
+    status:String(fd.get('status')),duration:Number(fd.get('duration')),
+    note:String(fd.get('note')||'').trim()
+  };
+  if(sid){const i=schedules.findIndex(x=>x.id===sid);if(i>=0)schedules[i]=item;}else{schedules.push(item);}
+  localStorage.setItem(SCHEDULE_KEY,JSON.stringify(schedules));
+  closeModal('scheduleModal');renderSchedules();renderNextSchedule(current);flash();
+}
+function editSchedule(id){
+  const s=schedules.find(x=>x.id===id);if(!s)return;
+  refreshSchedulePatientOptions();
+  const f=document.getElementById('scheduleForm');
+  f.elements.scheduleId.value=s.id;f.elements.patientId.value=s.patientId;f.elements.date.value=s.date;
+  f.elements.time.value=s.time;f.elements.sessionNo.value=s.sessionNo;f.elements.therapist.value=s.therapist;
+  f.elements.status.value=s.status;f.elements.duration.value=s.duration;f.elements.note.value=s.note||'';
+  document.getElementById('scheduleModalTitle').textContent='Edit Jadwal Terapi';openModal('scheduleModal');
+}
+function deleteSchedule(id){
+  const s=schedules.find(x=>x.id===id);if(!s)return;
+  if(!confirm('Hapus jadwal terapi ini?'))return;
+  schedules=schedules.filter(x=>x.id!==id);localStorage.setItem(SCHEDULE_KEY,JSON.stringify(schedules));
+  renderSchedules();renderNextSchedule(current);flash();
+}
+function renderSchedules(){
+  const grid=document.getElementById('scheduleGrid');if(!grid)return;
+  const pf=document.getElementById('schedulePatientFilter')?.value||'';
+  const sf=document.getElementById('scheduleStatusFilter')?.value||'';
+  const q=(document.getElementById('scheduleSearch')?.value||'').toLowerCase().trim();
+  const arr=[...schedules].filter(s=>{
+    const p=patients.find(x=>x.id===s.patientId), txt=((p?.name||'')+' '+s.therapist).toLowerCase();
+    return (!pf||s.patientId===pf)&&(!sf||s.status===sf)&&(!q||txt.includes(q));
+  }).sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time));
+  document.getElementById('scheduleCount').textContent=arr.length+' jadwal';
+  grid.innerHTML=arr.map(s=>{
+    const p=patients.find(x=>x.id===s.patientId);
+    const cls=s.status==='Selesai'?'st-done':s.status==='Dibatalkan'?'st-cancelled':'st-planned';
+    return `<div class="card schedule-card"><span class="schedule-status ${cls}">${s.status}</span><h3>${p?.name||'Pasien tidak ditemukan'}</h3>
+    <p><b>Sesi ke-${s.sessionNo}</b><br>📅 ${fmt(s.date)}<br>🕒 ${s.time} · ${s.duration} menit<br>👤 Terapis: ${s.therapist}${s.note?'<br>📝 '+s.note:''}</p>
+    <div class="schedule-actions"><button type="button" class="action-btn action-edit" onclick="editSchedule('${s.id}')">Edit</button><button type="button" class="action-btn action-delete" onclick="deleteSchedule('${s.id}')">Hapus</button></div></div>`;
+  }).join('')||'<div class="card" style="padding:22px">Belum ada jadwal terapi.</div>';
+}
+function renderNextSchedule(patientId){
+  const box=document.getElementById('nextSchedule');if(!box)return;
+  const now=new Date(), today=now.toISOString().slice(0,10), hm=now.toTimeString().slice(0,5);
+  const next=[...schedules].filter(s=>s.patientId===patientId&&s.status==='Terjadwal'&&(s.date>today||(s.date===today&&s.time>=hm)))
+    .sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time))[0];
+  if(!next){box.innerHTML='<p>Belum ada jadwal terapi berikutnya.</p>';return;}
+  box.innerHTML=`<p><b>Sesi ke-${next.sessionNo}</b><br>${fmt(next.date)}<br>${next.time} · ${next.duration} menit<br><br>Terapis: ${next.therapist}</p>`;
+}
+
+function showDashboard(){
+  hideAllViews();
+  const data=document.getElementById('patientDataView');
+  const dash=document.getElementById('dashboardView');
+  if(data) data.style.display='none';
+  if(dash) dash.style.display='block';
+  setActiveNav('Dashboard');
+  if(patients.length){
+    setTimeout(function(){
+      try{render();}catch(err){console.error(err);}
+      
+    },60);
+  }
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function refreshRecipePatients(){
+  const sel=document.getElementById('recipePatient'); if(!sel)return;
+  sel.innerHTML=patients.length?patients.map(p=>`<option value="${p.id}">${p.name} · ${p.id}</option>`).join(''):'<option value="">Belum ada pasien</option>';
+  if(current && patients.some(p=>p.id===current))sel.value=current;
+}
+function showRecipesView(){
+  hideAllViews();
+  const v=document.getElementById('recipesView'); if(v)v.style.display='block';
+  setActiveNav('Resep & Anjuran');
+  refreshRecipePatients();
+  renderRecipesView();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function renderRecipesView(){
+  const sel=document.getElementById('recipePatient');
+  const pid=sel?.value||current;
+  if(pid)current=pid;
+  const p=patients.find(x=>x.id===pid);
+  const grid=document.getElementById('recipeGrid'); if(!grid)return;
+  if(!p){grid.innerHTML='<div class="card" style="padding:20px">Belum ada pasien.</div>';return;}
+  if(!Array.isArray(p.recipes))p.recipes=[];
+  grid.innerHTML=p.recipes.length?p.recipes.slice().reverse().map(r=>`<div class="card note-card">
+    <div><span class="note-badge">${r.type||'Anjuran'}</span></div>
+    <h2 style="margin:10px 0 4px">${r.nama||'-'}</h2>
+    <div class="muted" style="font-size:12px">${r.date||''}</div>
+    <div class="note-body" style="margin-top:14px"><b>Dosis / Frekuensi:</b><br>${r.dosis||'-'}${r.catatan?`<br><br><b>Catatan:</b><br>${r.catatan}`:''}</div>
+    <div style="margin-top:16px"><button class="action-btn action-edit" type="button" onclick="editRecipe('${r.id}')">Edit</button> <button class="action-btn action-delete" type="button" onclick="removeRecipe('${r.id}')">Hapus</button></div>
+  </div>`).join(''):'<div class="card" style="padding:24px"><b>Belum ada Resep & Anjuran</b><p class="muted">Klik “+ Tambah Resep / Anjuran” untuk membuat data pasien ini.</p></div>';
+}
+function openRecipeModal(){
+  if(!current){alert('Pilih pasien terlebih dahulu.');return;}
+  const f=document.getElementById('recipeForm');f.reset();f.elements.id.value='';
+  f.elements.date.value=new Date().toISOString().slice(0,10);
+  document.getElementById('recipeModalTitle').textContent='Tambah Resep / Anjuran';
+  openModal('recipeModal');
+}
+function saveRecipeForm(){
+  const f=document.getElementById('recipeForm'); if(!f.reportValidity())return;
+  const p=patients.find(x=>x.id===current); if(!p){alert('Pasien tidak ditemukan.');return;}
+  if(!Array.isArray(p.recipes))p.recipes=[];
+  const fd=new FormData(f), id=String(fd.get('id')||'');
+  const data={id:id||('R'+Date.now()),type:String(fd.get('type')||'Anjuran'),nama:String(fd.get('nama')||'').trim(),dosis:String(fd.get('dosis')||'').trim(),date:String(fd.get('date')||''),catatan:String(fd.get('catatan')||'').trim()};
+  const idx=p.recipes.findIndex(r=>r.id===id);
+  if(idx>=0)p.recipes[idx]=data;else p.recipes.push(data);
+  save();closeModal('recipeModal');renderRecipesView();renderRecipeSummary(p);flash();
+}
+function editRecipe(id){
+  const p=patients.find(x=>x.id===current);const r=p?.recipes?.find(x=>x.id===id);if(!r)return;
+  const f=document.getElementById('recipeForm');
+  ['id','type','nama','dosis','date','catatan'].forEach(k=>f.elements[k].value=r[k]??'');
+  document.getElementById('recipeModalTitle').textContent='Edit Resep / Anjuran';openModal('recipeModal');
+}
+function removeRecipe(id){
+  const p=patients.find(x=>x.id===current);if(!p)return;
+  const r=p.recipes?.find(x=>x.id===id);if(!r)return;
+  if(!confirm('Hapus '+(r.nama||'resep/anjuran')+'?'))return;
+  p.recipes=p.recipes.filter(x=>x.id!==id);save();renderRecipesView();renderRecipeSummary(p);flash();
+}
+function renderRecipeSummary(p){
+  const box=document.getElementById('recipeSummary');if(!box)return;
+  const arr=Array.isArray(p?.recipes)?p.recipes:[];
+  box.innerHTML=arr.length?arr.slice(-3).reverse().map(r=>`<div><span>✓</span>${r.nama}<br><small>${r.dosis||''}</small></div>`).join(''):'<div class="muted">Belum ada resep atau anjuran.</div>';
+}
+
+const navDataPasien=document.getElementById('navDataPasien');
+const navDashboard=document.getElementById('navDashboard');
+if(navDataPasien) navDataPasien.addEventListener('click',function(e){e.preventDefault();showPatientData();});
+if(navDashboard) navDashboard.addEventListener('click',function(e){e.preventDefault();showDashboard();});
+
+const navSchedule=document.getElementById('navSchedule');
+if(navSchedule) navSchedule.addEventListener('click',function(e){e.preventDefault();showScheduleView();});
+
+const navNotes=document.getElementById('navNotes');
+if(navNotes) navNotes.addEventListener('click',function(e){e.preventDefault();showNotesView();});
+
+const navEvaluation=document.getElementById('navEvaluation');
+if(navEvaluation) navEvaluation.addEventListener('click',function(e){e.preventDefault();showEvaluationView();});
+const navRecipes=document.getElementById('navRecipes');
+if(navRecipes) navRecipes.addEventListener('click',function(e){e.preventDefault();showRecipesView();});
+
+
+
+
+
+
+
+
+
+function migrateSessionStatuses(){
+  let changed=false;
+  patients.forEach(p=>{
+    (p.sessions||[]).forEach(s=>{
+      if(!s.status){s.status='Selesai';changed=true;}
+    });
+  });
+  therapyNotes.forEach(n=>{
+    if(!n.status){n.status='Selesai';changed=true;}
+  });
+  if(changed){
+    save();
+    localStorage.setItem(NOTES_KEY,JSON.stringify(therapyNotes));
+  }
+}
+
+function reconcileNotesAndSessions(){
+  let changed=false;
+
+  patients.forEach(p=>{
+    if(!Array.isArray(p.sessions))p.sessions=[];
+
+    const notes=therapyNotes
+      .filter(n=>n.patientId===p.id)
+      .sort((a,b)=>Number(a.sessionNo)-Number(b.sessionNo));
+
+    notes.forEach(n=>{
+      const no=Number(n.sessionNo);
+      if(!no)return;
+
+      // 1) Cari record yang memang berasal dari catatan ini.
+      let idx=p.sessions.findIndex(s=>s.sourceNoteId===n.id);
+
+      // 2) Jika belum ada, cari record legacy berdasarkan isi/tanggal.
+      if(idx<0){
+        idx=p.sessions.findIndex(s=>
+          !s.sourceNoteId &&
+          (
+            (String(s.date||'')===String(n.date||'') &&
+             String(s.note||'').trim()===String(n.note||'').trim()) ||
+            (String(s.date||'')===String(n.date||'') &&
+             String(s.complaint||'').trim()===String(n.condition||'').trim())
+          )
+        );
+      }
+
+      // 3) Jika masih belum ada, cari nomor sesi yang sama.
+      if(idx<0)idx=p.sessions.findIndex(s=>Number(s.sessionNo)===no);
+
+      const old=idx>=0?p.sessions[idx]:{};
+      const merged={
+        ...old,
+        sessionNo:no,
+        sourceNoteId:n.id,
+        date:n.date||old.date||'',
+        complaint:n.condition||old.complaint||'',
+        note:n.note||old.note||'',
+        status:n.status||old.status||'Selesai',
+        pain:(n.pain!==undefined && n.pain!==null && n.pain!=='')?Number(n.pain):Number(old.pain||0),
+        movement:(n.movement!==undefined && n.movement!==null && n.movement!=='')?Number(n.movement):Number(old.movement||0),
+        quality:(n.quality!==undefined && n.quality!==null && n.quality!=='')?Number(n.quality):Number(old.quality||0)
+      };
+
+      if(idx>=0)p.sessions[idx]=merged;
+      else p.sessions.push(merged);
+      changed=true;
+    });
+
+    // Catatan Terapi adalah sumber nomor sesi utama.
+    // Hapus record sesi lain yang memakai nomor sesi yang sudah dimiliki catatan.
+    const noteNos=new Set(notes.map(n=>Number(n.sessionNo)).filter(Boolean));
+    const noteIds=new Set(notes.map(n=>n.id));
+    p.sessions=p.sessions.filter(s=>{
+      const no=Number(s.sessionNo);
+      if(!noteNos.has(no))return true;
+      return !!s.sourceNoteId && noteIds.has(s.sourceNoteId);
+    });
+
+    // Pastikan hanya satu record per nomor sesi.
+    const map=new Map();
+    p.sessions.forEach(s=>{
+      const no=Number(s.sessionNo);
+      if(!no)return;
+      const prev=map.get(no);
+      if(!prev || (s.sourceNoteId && !prev.sourceNoteId))map.set(no,s);
+    });
+    p.sessions=[...map.values()].sort((a,b)=>Number(a.sessionNo)-Number(b.sessionNo));
+  });
+
+  if(changed)save();
+}
+
+function repairSessionData(){
+  reconcileNotesAndSessions();
+  normalizeAllPatientSessions();
+  save();
+  try{render();}catch(e){console.error(e);}
+  alert('Data sesi sudah disinkronkan ulang dari Catatan Terapi.');
+}
+
+
+function exportBackup(){
+  try{
+    const payload={
+      app:'ASDTY Monitoring Terapi',
+      version:'FINAL-1.0',
+      exportedAt:new Date().toISOString(),
+      patients:patients,
+      therapyNotes:therapyNotes,
+      schedules:(typeof schedules!=='undefined'?schedules:[])
+    };
+    const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a');
+    const d=new Date();
+    const stamp=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+    a.href=url;
+    a.download='backup-monitoring-terapi-ASDTY-'+stamp+'.json';
+    document.body.appendChild(a);a.click();a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),1000);
+  }catch(e){
+    console.error(e);alert('Backup data gagal dibuat.');
+  }
+}
+function importBackup(file){
+  if(!file)return;
+  const reader=new FileReader();
+  reader.onload=function(){
+    try{
+      const data=JSON.parse(reader.result);
+      if(!data || !Array.isArray(data.patients))throw new Error('Format backup tidak valid');
+      if(!confirm('Restore akan mengganti data Monitoring Terapi yang tersimpan di browser ini. Lanjutkan?'))return;
+
+      patients=data.patients;
+      therapyNotes=Array.isArray(data.therapyNotes)?data.therapyNotes:[];
+
+      localStorage.setItem(STORE,JSON.stringify(patients));
+      localStorage.setItem(NOTES_KEY,JSON.stringify(therapyNotes));
+
+      if(typeof SCHEDULE_KEY!=='undefined' && Array.isArray(data.schedules)){
+        localStorage.setItem(SCHEDULE_KEY,JSON.stringify(data.schedules));
+        if(typeof schedules!=='undefined')schedules=data.schedules;
+      }
+
+      reconcileNotesAndSessions();
+      normalizeAllPatientSessions();
+      save();
+
+      if(!patients.some(p=>p.id===current))current=patients[0]?.id||'';
+      alert('Restore data berhasil.');
+      render();
+    }catch(e){
+      console.error(e);alert('File backup tidak valid atau tidak dapat dibaca.');
+    }
+  };
+  reader.readAsText(file);
+}
+
+function resetDemo(){
+  if(confirm('Reset seluruh data lokal ke data demo?')){
+    patients=JSON.parse(JSON.stringify(demo));
+    current=patients[0].id;
+    save();
+    render();
+    renderPatientTable();
+  }
+}
+
+// STARTUP REPAIR: penting untuk data Blogger/localStorage yang sudah ada.
+try{
+  migrateSessionStatuses();
+  reconcileNotesAndSessions();
+  normalizeAllPatientSessions();
+  save();
+  console.log('Sinkronisasi sesi selesai:', patients.map(p=>({id:p.id,sesi:(p.sessions||[]).map(s=>s.sessionNo)})));
+}catch(e){console.error('Startup session repair:',e);}
+render();
+
+
+/* === TAHAP 10 : RESEP & ANJURAN PER PASIEN === */
+function getPatientRecipes(pid){
+  const p=patients.find(x=>x.id===pid);
+  if(!p)return [];
+  if(!Array.isArray(p.recipes))p.recipes=[];
+  return p.recipes;
+}
+
+function addRecipe(pid,nama,dosis,catatan){
+  const p=patients.find(x=>x.id===pid);
+  if(!p)return;
+  if(!Array.isArray(p.recipes))p.recipes=[];
+  p.recipes.push({
+    id:'R'+Date.now(),
+    nama:nama,
+    dosis:dosis,
+    catatan:catatan
+  });
+  save();
+  try{render();}catch(e){console.error(e);}
+}
+
+function deleteRecipe(pid,id){
+  const p=patients.find(x=>x.id===pid);
+  if(!p||!Array.isArray(p.recipes))return;
+  p.recipes=p.recipes.filter(r=>r.id!==id);
+  save();
+  try{render();}catch(e){console.error(e);}
+}
+
+
+</script>
+<script>
+(function(){
+  if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
+    window.addEventListener('load', function(){
+      navigator.serviceWorker.register('./service-worker.js').catch(function(err){ console.warn('PWA service worker:', err); });
+    });
+  }
+})();
+</script>
+</body></html>
