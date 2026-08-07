@@ -499,6 +499,12 @@ function buildPatientReport(p){
  <div class="pr-sign"><div>Yogyakarta, ${escReport(fmt(new Date().toISOString().slice(0,10)))}<br><br><br><b>${escReport(p.therapist||'Terapis')}</b><br><small>Terapis</small></div></div>`;
 }
 function printPatientReport(){
+
+ if(window.AndroidPrint){
+    AndroidPrint.printPage();
+    return;
+ }
+
  const p=patients.find(x=>x.id===current)||patients[0];if(!p){alert('Belum ada pasien yang dipilih.');return;}
  const reportHTML=buildPatientReport(p),w=window.open('', '_blank', 'width=1000,height=800');if(!w){alert('Popup cetak diblokir browser. Izinkan pop-up untuk halaman ini, lalu klik Cetak Laporan lagi.');return;}
  const printCSS=`@page{size:A4 portrait;margin:8mm}*{box-sizing:border-box}html,body{margin:0;padding:0;background:#fff;color:#111;font-family:Arial,sans-serif;font-size:9pt;line-height:1.22}body{width:194mm;margin:0 auto}.pr-head{border-bottom:1.5px solid #111;padding:0 0 5px;margin:0 0 6px}.pr-head h1{font-size:18pt;margin:0 0 2px}.pr-head div{font-size:9.5pt}.pr-grid{display:grid;grid-template-columns:1fr 1fr;gap:3px 16px;margin:5px 0}.pr-box{border:1px solid #bbb;border-radius:5px;padding:6px 8px;margin:6px 0;break-inside:avoid;page-break-inside:avoid}.pr-box h3{font-size:11pt;margin:0 0 4px}.pr-chart-box{padding-bottom:3px}.pr-chart{display:block;width:100%;height:54mm}.pr-empty{text-align:center;padding:18px;color:#777}table{width:100%;border-collapse:collapse;font-size:7.3pt;line-height:1.12}th,td{border:1px solid #bbb;padding:2.5px 3px;text-align:left;vertical-align:top}th{background:#f2f2f2;-webkit-print-color-adjust:exact;print-color-adjust:exact}.pr-sign{margin-top:8px;display:flex;justify-content:flex-end;break-inside:avoid}.pr-sign>div{text-align:center;min-width:170px;font-size:8.5pt}@media print{html,body{width:auto!important;overflow:visible!important}}`;
