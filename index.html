@@ -329,7 +329,7 @@ function openGoogleSheetSettings(){
 async function saveGoogleSheetSettings(){
   const url=(document.getElementById('googleSheetUrl')?.value||'').trim();
   if(!url){alert('Masukkan URL Web App Google Apps Script terlebih dahulu.');return;}
-  if(!/^https://script.google.com/macros/s/AKfycbwz-gy0FjQqFpkUAE7w5O2pcAWdYGEiIlM5dVuGDEQ76qdAgL7Y1EU29wFuca6BsEZI/exec/.test(url)){alert('URL belum terlihat seperti URL Web App Google Apps Script yang benar.');return;}
+  if(!/^https:\/\/script\.google\.com\/macros\/s\/.+\/exec/.test(url)){alert('URL belum terlihat seperti URL Web App Google Apps Script yang benar.');return;}
   localStorage.setItem(GS_URL_KEY,url);
   setGoogleSheetStatus('Mengirim data…');
   const result=await syncToGoogleSheet('initial-setup');
